@@ -1,0 +1,105 @@
+{
+  "profile": {
+    "name": "CREATOR",
+    "tagline": "Lifestyle • Gastronomia • Moda • Carros",
+    "niches": ["Lifestyle", "Gastronomia", "Moda", "Carros"],
+    "location": "Interior Paulista — Americana e Região",
+    "aesthetic": "Minimalismo de luxo, fotos contrastadas, tom sóbrio e editorial",
+    "avatar": "/midiakit/avatar.webp"
+  },
+  "metrics": {
+    "totalViews": { "value": "2.4M", "raw": 2400000, "label": "Visualizações Consolidadas" },
+    "peakReach": { "value": "+127K", "raw": 127000, "label": "Pico de Alcance" },
+    "avgRetention": { "value": "68%", "raw": 68, "label": "Retenção Média" },
+    "engagementRate": { "value": "4.2%", "raw": 4.2, "label": "Taxa de Engajamento" },
+    "demographics": {
+      "gender": [
+        { "label": "Feminino", "value": 62 },
+        { "label": "Masculino", "value": 38 }
+      ],
+      "ageGroups": [
+        { "label": "18–24", "value": 18 },
+        { "label": "25–34", "value": 42 },
+        { "label": "35–44", "value": 28 },
+        { "label": "45+", "value": 12 }
+      ]
+    }
+  },
+  "showcase": [
+    {
+      "id": "sc-01",
+      "title": "Cobertura Gastronômica",
+      "brand": "Restaurante Alto Padrão",
+      "thumbnail": "/midiakit/thumb-gastro.webp",
+      "video": null,
+      "category": "gastronomia"
+    },
+    {
+      "id": "sc-02",
+      "title": "Lançamento Automotivo",
+      "brand": "Marca Premium",
+      "thumbnail": "/midiakit/thumb-auto.webp",
+      "video": null,
+      "category": "carros"
+    },
+    {
+      "id": "sc-03",
+      "title": "Editorial de Moda",
+      "brand": "Grife Nacional",
+      "thumbnail": "/midiakit/thumb-moda.webp",
+      "video": null,
+      "category": "moda"
+    },
+    {
+      "id": "sc-04",
+      "title": "Lifestyle & Experiência",
+      "brand": "Marca Lifestyle",
+      "thumbnail": "/midiakit/thumb-lifestyle.webp",
+      "video": null,
+      "category": "lifestyle"
+    }
+  ],
+  "packages": [
+    {
+      "id": "pkg-gastro",
+      "name": "Visita Gastronômica",
+      "tier": "ESSENCIAL",
+      "description": "Cobertura completa em Stories + 1 Reel colaborativo com direção estética de cinema.",
+      "includes": [
+        "Cobertura completa em Stories (mínimo 8 frames)",
+        "1 Reel colaborativo com edição profissional",
+        "Direção estética e de fotografia",
+        "Entrega em até 72h após a ação"
+      ]
+    },
+    {
+      "id": "pkg-evento",
+      "name": "Lançamento / Evento",
+      "tier": "ESTRATÉGICO",
+      "description": "Presença estratégica, ativação de marca e captação de público local.",
+      "includes": [
+        "Presença VIP no evento com cobertura integral",
+        "Ativação de marca com storytelling autêntico",
+        "2 Reels + Stories completos do evento",
+        "Captação e redirecionamento de público local"
+      ]
+    },
+    {
+      "id": "pkg-vip",
+      "name": "Presença VIP",
+      "tier": "EXCLUSIVO",
+      "description": "Alinhamento de imagem de marca, ensaio de produto e contrato de exclusividade regional.",
+      "includes": [
+        "Alinhamento completo de imagem de marca",
+        "Ensaio profissional de produto/serviço",
+        "Contrato de exclusividade regional",
+        "3 Reels + Stories + menções mensais",
+        "Relatório de performance mensal"
+      ]
+    }
+  ],
+  "whatsapp": {
+    "number": "5519994656845",
+    "message": "Olá, tenho interesse em fechar uma ação com a marca. Gostaria de verificar a agenda para o pacote"
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -18,8 +18,18 @@ import Process from './components/Process';
 import FAQ from './components/FAQ';
 import CTAFinal from './components/CTAFinal';
 import Footer from './components/Footer';
+import MediaKitPage from './components/MediaKitPage';
+import EnterprisePage from './components/EnterprisePage';
 
 export default function App() {
+  const [route, setRoute] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const onPopState = () => setRoute(window.location.pathname);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   // Global scroll animations for legacy data-reveal elements
   useGSAP(() => {
     gsap.utils.toArray('[data-reveal]').forEach((elem) => {
@@ -41,7 +51,14 @@ export default function App() {
       const targetId = anchor.getAttribute('href');
       if (targetId === '#') return;
 
-      const target = document.querySelector(targetId);
+      if (targetId === '#midiakit') {
+        window.dispatchEvent(new CustomEvent('open-midiakit'));
+      } else if (targetId === '#enterprise') {
+        window.dispatchEvent(new CustomEvent('open-enterprise'));
+      }
+
+      const selector = (targetId === '#midiakit' || targetId === '#enterprise') ? '#solucoes' : targetId;
+      const target = document.querySelector(selector);
       if (target) {
         e.preventDefault();
         const y = target.getBoundingClientRect().top + window.pageYOffset - 80;
@@ -52,6 +69,14 @@ export default function App() {
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
   }, []);
+
+  if (route === '/midiakit') {
+    return <MediaKitPage />;
+  }
+
+  if (route === '/enterprise') {
+    return <EnterprisePage />;
+  }
 
   return (
     <div className="volcanic-dust">

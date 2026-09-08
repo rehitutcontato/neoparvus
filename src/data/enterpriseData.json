@@ -1,0 +1,130 @@
+{
+  "statusBar": {
+    "left": {
+      "label": "INFRAESTRUTURA: NATIVA",
+      "status": "PRODUÇÃO",
+      "latency": "0.14s"
+    },
+    "center": {
+      "url": "hq.enterprise-asset.com",
+      "ssl": true
+    },
+    "right": {
+      "label": "CALIBRADO PARA CONTRATOS B2B DE ALTO VALOR"
+    }
+  },
+  "hero": {
+    "badge": "SISTEMA DE AQUISIÇÃO B2B · VERSÃO 4.2",
+    "headline": "Autoridade inquestionável para operações que disputam mercado com os maiores.",
+    "subtitle": "Substitua a informalidade de sites genéricos por uma sede digital projetada para validar propostas de alto valor, blindar sua margem comercial e qualificar tomadores de decisão antes do primeiro aperto de mão.",
+    "indicators": [
+      {
+        "id": "ind-01",
+        "value": "0%",
+        "label": "Desconto Pedido",
+        "description": "A ancoragem visual elimina a percepção de custo logo no primeiro scroll."
+      },
+      {
+        "id": "ind-02",
+        "value": "−47%",
+        "label": "Ciclo de Vendas",
+        "description": "O lead consome a tese da empresa e chega na call já convencido do método."
+      },
+      {
+        "id": "ind-03",
+        "value": "100%",
+        "label": "Filtro Ativo de Porte",
+        "description": "Barreiras elegantes de qualificação que dispensam clientes sem verba."
+      }
+    ]
+  },
+  "hotspots": [
+    {
+      "id": "hs-01",
+      "number": 1,
+      "title": "Hierarquia de Poder",
+      "description": "Tipografia austera que transmite 20 anos de solidez em 3 segundos de leitura. O visitante sente autoridade antes de ler a primeira frase.",
+      "target": "headline"
+    },
+    {
+      "id": "hs-02",
+      "number": 2,
+      "title": "Quebra Prévia de Objeções",
+      "description": "O cliente corporativo entende a capacidade de entrega antes de questionar o preço. Quando ele chega na call, o valor já foi internalizado.",
+      "target": "thesis"
+    },
+    {
+      "id": "hs-03",
+      "number": 3,
+      "title": "Engenharia de Processo",
+      "description": "O serviço não parece abstrato. É apresentado como um sistema industrial com etapas claras, gerando confiança imediata no tomador de decisão.",
+      "target": "mechanism"
+    },
+    {
+      "id": "hs-04",
+      "number": 4,
+      "title": "Filtro Anti-Curioso",
+      "description": "Coleta de faturamento e decisor que impede reuniões inúteis com quem não tem orçamento. Só chega quem pode pagar.",
+      "target": "qualifier"
+    }
+  ],
+  "mechanism": {
+    "sectionLabel": "MECANISMO PROPRIETÁRIO",
+    "sectionTitle": "Um sistema industrial, não um serviço genérico.",
+    "steps": [
+      {
+        "id": "step-01",
+        "number": "01",
+        "title": "DIAGNÓSTICO E AUDITORIA DE RISCO",
+        "description": "Mapeamento de vulnerabilidades operacionais e pontos de vazamento de receita da empresa contratante. Identificamos onde sua presença digital perde negócios antes da primeira proposta."
+      },
+      {
+        "id": "step-02",
+        "number": "02",
+        "title": "IMPLANTAÇÃO DA INFRAESTRUTURA",
+        "description": "Desenvolvimento em código proprietário, integração direta com os bancos de dados e esteira comercial da operação. Zero templates, zero plugins frágeis."
+      },
+      {
+        "id": "step-03",
+        "number": "03",
+        "title": "ESCALABILIDADE CONTROLADA",
+        "description": "Ativação de tráfego de alta intenção com monitoramento de métricas e conversão assistida. Cada visitante que chega, é um tomador de decisão qualificado."
+      }
+    ]
+  },
+  "qualifier": {
+    "sectionLabel": "SIMULADOR DE TRIAGEM C-LEVEL",
+    "sectionTitle": "Teste o filtro de qualificação ao vivo.",
+    "steps": [
+      {
+        "question": "Qual é o porte atual de faturamento anual da sua empresa?",
+        "options": [
+          "R$ 1.2M a R$ 5M",
+          "R$ 5M a R$ 20M",
+          "Acima de R$ 20M"
+        ]
+      },
+      {
+        "question": "Qual é o principal desafio na mesa hoje?",
+        "options": [
+          "Ticket médio pressionado por concorrentes",
+          "Ciclo de vendas longo e burocrático",
+          "Falta de percepção de autoridade perante grandes contas"
+        ]
+      }
+    ],
+    "result": {
+      "title": "Operação qualificada.",
+      "subtitle": "Direcionamento para atendimento direto com o comitê executivo.",
+      "ctaLabel": "Solicitar Reunião com Diretor ↗"
+    }
+  },
+  "footer": {
+    "anchorText": "Essa é a arquitetura que instalamos na sua empresa. Sem templates, sem plugins frágeis, construída em código próprio do zero.",
+    "ctaLabel": "Construir a infraestrutura da minha empresa ↗"
+  },
+  "whatsapp": {
+    "number": "5519994656845",
+    "message": "Olá Pablo, minha empresa está pronta para o próximo nível. Gostaria de agendar uma reunião executiva para discutir a infraestrutura digital."
+  }
+}

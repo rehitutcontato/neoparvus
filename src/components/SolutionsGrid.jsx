@@ -1,8 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassCard from './GlassCard';
+import MediaKitDemo from './MediaKitDemo';
+import EnterpriseDemo from './EnterpriseDemo';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(useGSAP);
@@ -30,25 +32,107 @@ const dotStyle = {
 
 export default function SolutionsGrid() {
   const sectionRef = useRef(null);
+  const [entOpen, setEntOpen] = useState(false);
+  const entRef = useRef(null);
+  const [mkOpen, setMkOpen] = useState(false);
+  const mkRef = useRef(null);
+
+  // Auto-open if navigated via #enterprise, #midiakit or custom events
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#enterprise' || window.location.hash === '#empresas') {
+        setEntOpen(true);
+        setTimeout(() => {
+          entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      } else if (window.location.hash === '#midiakit') {
+        setMkOpen(true);
+        setTimeout(() => {
+          mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+
+    const handleCustomOpenMk = () => {
+      setMkOpen(true);
+      setTimeout(() => {
+        mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    };
+    window.addEventListener('open-midiakit', handleCustomOpenMk);
+
+    const handleCustomOpenEnt = () => {
+      setEntOpen(true);
+      setTimeout(() => {
+        entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    };
+    window.addEventListener('open-enterprise', handleCustomOpenEnt);
+
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+      window.removeEventListener('open-midiakit', handleCustomOpenMk);
+      window.removeEventListener('open-enterprise', handleCustomOpenEnt);
+    };
+  }, []);
 
   useGSAP(() => {
-    // Premium Reveal: Scale up and unblur
-    gsap.from('.gs-card', {
-      y: 120,
-      scale: 0.9,
+    // Header reveal (once: true with clearProps so it never gets stuck hidden)
+    gsap.from('.gs-header-item', {
+      y: 40,
       opacity: 0,
-      filter: 'blur(10px)',
-      stagger: 0.2,
-      duration: 1.5,
+      stagger: 0.1,
+      duration: 0.9,
       ease: 'power3.out',
+      clearProps: 'all',
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 85%',
+        once: true,
+      }
+    });
+
+    // Cards reveal
+    gsap.from('.gs-card', {
+      y: 60,
+      opacity: 0,
+      stagger: 0.15,
+      duration: 1,
+      ease: 'power3.out',
+      clearProps: 'all',
       scrollTrigger: {
         trigger: sectionRef.current,
         start: 'top 80%',
-        end: 'top 30%',
-        scrub: 1,
+        once: true,
       }
     });
   }, { scope: sectionRef });
+
+  const handleExpandEnt = () => {
+    setEntOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        setTimeout(() => {
+          entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      }
+      return next;
+    });
+  };
+
+  const handleExpandMK = () => {
+    setMkOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        setTimeout(() => {
+          mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      }
+      return next;
+    });
+  };
 
   return (
     <section id="solucoes" ref={sectionRef} className="section" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -68,13 +152,52 @@ export default function SolutionsGrid() {
       }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        {/* ══ SECTION HEADER ══ */}
         <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <h2 className="headline-brutal" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
-            NÃO VENDEMOS SITES.<br />
-            <span className="magma-text">VENDEMOS STATUS.</span>
+          <span
+            className="gs-header-item"
+            style={{
+              display: 'inline-block',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 500,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--zinc-tech)',
+              marginBottom: '24px',
+              padding: '8px 20px',
+              border: '1px solid var(--glass-border)',
+              background: 'rgba(255, 94, 0, 0.04)',
+            }}
+          >
+            02 / PORTFÓLIO & ATIVOS FUNCIONAIS
+          </span>
+
+          <h2
+            className="gs-header-item headline-brutal"
+            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', marginBottom: '24px' }}
+          >
+            PROJETOS CONSTRUÍDOS PARA{' '}
+            <span className="magma-text">IMPOR RESPEITO</span>
+            <br />
+            E FECHAR NEGÓCIOS.
           </h2>
+
+          <p
+            className="gs-header-item"
+            style={{
+              fontSize: '18px',
+              lineHeight: 1.65,
+              color: 'var(--zinc-tech)',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Não mostramos mockups estáticos. Criamos ativos digitais vivos que posicionam marcas no topo da cadeia.
+          </p>
         </div>
 
+        {/* ══ CARDS GRID ══ */}
         <div
           style={{
             display: 'grid',
@@ -82,9 +205,14 @@ export default function SolutionsGrid() {
             gap: '32px',
           }}
         >
-          {/* Card — Empresas */}
-          <div className="gs-card" style={{ transition: 'transform 0.4s ease', cursor: 'default' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-            <GlassCard 
+          {/* ── Card 01: Empresas High-Ticket ── */}
+          <div
+            className="gs-card"
+            style={{ transition: 'transform 0.4s ease', cursor: 'default' }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            <GlassCard
               label="01 / PARA EMPRESAS HIGH-TICKET"
               style={{
                 height: '100%',
@@ -97,6 +225,38 @@ export default function SolutionsGrid() {
               }}
             >
               <div>
+                {/* Live Demo Badge */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '5px 14px',
+                  borderRadius: '100px',
+                  background: 'rgba(255, 94, 0, 0.12)',
+                  border: '1px solid rgba(255, 94, 0, 0.4)',
+                  marginBottom: '18px',
+                  boxShadow: '0 0 15px rgba(255, 94, 0, 0.2)'
+                }}>
+                  <span style={{
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '50%',
+                    background: 'var(--amber)',
+                    boxShadow: '0 0 10px var(--amber)',
+                    display: 'inline-block'
+                  }} />
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    letterSpacing: '0.1em',
+                    color: 'var(--amber)',
+                    fontWeight: 600,
+                    textTransform: 'uppercase'
+                  }}>
+                    Demo Interativa Disponível
+                  </span>
+                </div>
+
                 <h3
                   className="headline-lg"
                   style={{ marginBottom: '24px', lineHeight: 1.1 }}
@@ -126,20 +286,61 @@ export default function SolutionsGrid() {
                 </ul>
               </div>
 
-              <a
-                href={WA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-                style={{ alignSelf: 'flex-start', width: '100%', textAlign: 'center', justifyContent: 'center' }}
-              >
-                Expandir minha empresa ↗
-              </a>
+              <div>
+                <button
+                  onClick={handleExpandEnt}
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    background: entOpen
+                      ? 'rgba(255, 94, 0, 0.15)'
+                      : 'linear-gradient(135deg, var(--amber) 0%, var(--tungsten) 100%)',
+                    color: entOpen ? 'var(--amber)' : 'var(--void)',
+                    fontWeight: 700,
+                    borderColor: 'var(--amber)',
+                    boxShadow: entOpen ? 'none' : '0 0 30px rgba(255, 94, 0, 0.3)',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    padding: '16px 20px',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {entOpen ? '✕ Recolher Demo Corporativa' : '⚡ Abrir Demo Corporativa [Ao Vivo] ↓'}
+                </button>
+
+                <div style={{ marginTop: '14px', textAlign: 'center' }}>
+                  <a
+                    href="/enterprise"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '11px',
+                      letterSpacing: '0.08em',
+                      color: 'var(--zinc-tech)',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={e => e.target.style.color = 'var(--amber)'}
+                    onMouseLeave={e => e.target.style.color = 'var(--zinc-tech)'}
+                  >
+                    Ou ver em tela cheia (/enterprise) ↗
+                  </a>
+                </div>
+              </div>
             </GlassCard>
           </div>
 
-          {/* Card — Criadores */}
-          <div className="gs-card" style={{ transition: 'transform 0.4s ease', cursor: 'default' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+          {/* ── Card 02: Criadores & Personalidades ── */}
+          <div
+            className="gs-card"
+            style={{ transition: 'transform 0.4s ease', cursor: 'default' }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+          >
             <GlassCard
               label="02 / PARA CRIADORES E PERSONALIDADES"
               style={{
@@ -149,10 +350,43 @@ export default function SolutionsGrid() {
                 justifyContent: 'space-between',
                 padding: '48px',
                 background: 'linear-gradient(135deg, rgba(255, 94, 0, 0.08) 0%, rgba(5,5,5,0.9) 100%)',
-                boxShadow: 'inset 0 1px 0 rgba(255,94,0,0.2), 0 20px 40px rgba(0,0,0,0.5)'
+                boxShadow: 'inset 0 1px 0 rgba(255,94,0,0.2), 0 20px 40px rgba(0,0,0,0.5)',
+                position: 'relative',
               }}
             >
               <div>
+                {/* Live Demo Badge */}
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '5px 14px',
+                  borderRadius: '100px',
+                  background: 'rgba(255, 94, 0, 0.12)',
+                  border: '1px solid rgba(255, 94, 0, 0.4)',
+                  marginBottom: '18px',
+                  boxShadow: '0 0 15px rgba(255, 94, 0, 0.2)'
+                }}>
+                  <span style={{
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '50%',
+                    background: 'var(--amber)',
+                    boxShadow: '0 0 10px var(--amber)',
+                    display: 'inline-block'
+                  }} />
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    letterSpacing: '0.1em',
+                    color: 'var(--amber)',
+                    fontWeight: 600,
+                    textTransform: 'uppercase'
+                  }}>
+                    Demo Interativa Disponível
+                  </span>
+                </div>
+
                 <h3
                   className="headline-lg"
                   style={{ marginBottom: '24px', lineHeight: 1.1 }}
@@ -182,17 +416,63 @@ export default function SolutionsGrid() {
                 </ul>
               </div>
 
-              <a
-                href={WA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-                style={{ alignSelf: 'flex-start', width: '100%', textAlign: 'center', justifyContent: 'center' }}
-              >
-                Elevar meu status ↗
-              </a>
+              <div>
+                <button
+                  onClick={handleExpandMK}
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    background: mkOpen
+                      ? 'rgba(255, 94, 0, 0.15)'
+                      : 'linear-gradient(135deg, var(--amber) 0%, var(--tungsten) 100%)',
+                    color: mkOpen ? 'var(--amber)' : 'var(--void)',
+                    fontWeight: 700,
+                    borderColor: 'var(--amber)',
+                    boxShadow: mkOpen ? 'none' : '0 0 30px rgba(255, 94, 0, 0.3)',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    padding: '16px 20px',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {mkOpen ? '✕ Recolher Mídia Kit' : '⚡ Abrir Mídia Kit Interativo [Demo ao Vivo] ↓'}
+                </button>
+
+                <div style={{ marginTop: '14px', textAlign: 'center' }}>
+                  <a
+                    href="/midiakit"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '11px',
+                      letterSpacing: '0.08em',
+                      color: 'var(--zinc-tech)',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={e => e.target.style.color = 'var(--amber)'}
+                    onMouseLeave={e => e.target.style.color = 'var(--zinc-tech)'}
+                  >
+                    Ou ver em tela cheia (/midiakit) ↗
+                  </a>
+                </div>
+              </div>
             </GlassCard>
           </div>
+        </div>
+
+        {/* ══ ENTERPRISE DEMO (EXPANDABLE) ══ */}
+        <div ref={entRef} id="enterprise">
+          <EnterpriseDemo isOpen={entOpen} />
+        </div>
+
+        {/* ══ MEDIA KIT DEMO (EXPANDABLE) ══ */}
+        <div ref={mkRef} id="midiakit">
+          <MediaKitDemo isOpen={mkOpen} />
         </div>
       </div>
     </section>

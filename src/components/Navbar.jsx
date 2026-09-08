@@ -4,6 +4,8 @@ const WA_LINK = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20estou%20
 
 const navLinks = [
   { label: 'SOLUÇÕES', href: '#solucoes' },
+  { label: 'DEMO B2B', href: '#enterprise', isNew: true },
+  { label: 'MÍDIA KIT', href: '#midiakit', isNew: true },
   { label: 'PROJETOS', href: '#entregas' },
   { label: 'SOBRE', href: '#sobre' },
   { label: 'INSTAGRAM', href: 'https://instagram.com/parvuspace' },
@@ -74,26 +76,45 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '40px',
+              gap: '28px',
             }}
             className="hide-mobile"
             aria-label="Navegação principal"
           >
-            {navLinks.map(({ label, href }) => (
+            {navLinks.map(({ label, href, isNew }) => (
               <a
                 key={href}
                 href={href}
+                onClick={() => {
+                  if (href === '#midiakit') {
+                    window.dispatchEvent(new CustomEvent('open-midiakit'));
+                  } else if (href === '#enterprise') {
+                    window.dispatchEvent(new CustomEvent('open-enterprise'));
+                  }
+                }}
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '11px',
                   fontWeight: 500,
                   letterSpacing: '0.12em',
-                  color: 'var(--zinc-tech)',
+                  color: isNew ? 'var(--amber)' : 'var(--zinc-tech)',
                   transition: 'color 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
                 }}
-                onMouseEnter={e => e.target.style.color = 'var(--titanium)'}
-                onMouseLeave={e => e.target.style.color = 'var(--zinc-tech)'}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--titanium)'}
+                onMouseLeave={e => e.currentTarget.style.color = isNew ? 'var(--amber)' : 'var(--zinc-tech)'}
               >
+                {isNew && (
+                  <span style={{
+                    width: '5px',
+                    height: '5px',
+                    borderRadius: '50%',
+                    background: 'var(--amber)',
+                    boxShadow: '0 0 6px var(--amber)',
+                  }} />
+                )}
                 {label}
               </a>
             ))}
@@ -191,19 +212,38 @@ export default function Navbar() {
           transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {navLinks.map(({ label, href }) => (
+        {navLinks.map(({ label, href, isNew }) => (
           <a
             key={href}
             href={href}
-            onClick={closeMenu}
+            onClick={() => {
+              closeMenu();
+              if (href === '#midiakit') {
+                window.dispatchEvent(new CustomEvent('open-midiakit'));
+              } else if (href === '#enterprise') {
+                window.dispatchEvent(new CustomEvent('open-enterprise'));
+              }
+            }}
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '18px',
               fontWeight: 500,
               letterSpacing: '0.12em',
-              color: 'var(--titanium)',
+              color: isNew ? 'var(--amber)' : 'var(--titanium)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
             }}
           >
+            {isNew && (
+              <span style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: 'var(--amber)',
+                boxShadow: '0 0 8px var(--amber)',
+              }} />
+            )}
             {label}
           </a>
         ))}
