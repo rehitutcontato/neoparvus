@@ -5,16 +5,25 @@
 
 /* ── Container & Reveal ── */
 .mk-demo {
-  max-height: 0;
-  overflow: hidden;
+  display: none;
   opacity: 0;
-  transition: max-height 1s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mk-demo.mk-open {
-  max-height: 8000px;
+  display: block;
   opacity: 1;
+  animation: mkFadeSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes mkFadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .mk-inner {

@@ -127,7 +127,7 @@ export default function Deliverables() {
     return () => {
       window.removeEventListener('resize', render);
     };
-  }, [isLoaded]);
+  }, { scope: wrapperRef, dependencies: [isLoaded] });
 
   return (
     <section 
@@ -193,7 +193,7 @@ export default function Deliverables() {
           </h2>
 
           <div style={{ position: 'relative', height: '400px', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-            {items.map((item, i) => (
+            {items.map((item) => (
               <div
                 key={item.num}
                 className="liquid-card"
@@ -202,12 +202,12 @@ export default function Deliverables() {
                   top: 0,
                   left: 0,
                   width: '100%',
-                  background: 'rgba(15, 15, 15, 0.4)',
+                  background: 'linear-gradient(135deg, rgba(20, 20, 24, 0.94) 0%, rgba(10, 10, 12, 0.98) 100%)',
                   backdropFilter: 'blur(30px) saturate(150%)',
                   WebkitBackdropFilter: 'blur(30px) saturate(150%)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.3)',
-                  boxShadow: '0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  borderTop: '1px solid rgba(255, 94, 0, 0.35)',
+                  boxShadow: '0 30px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
                   borderRadius: '24px',
                   padding: '40px',
                   display: 'flex',

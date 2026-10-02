@@ -1,169 +1,234 @@
-import { useEffect, useRef } from 'react';
-
-const ECLIPSE_CSS = {
-  wrapper: {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    userSelect: 'none',
-  },
-  corona: {
-    position: 'absolute',
-    width: '650px',
-    height: '650px',
-    borderRadius: '50%',
-    background: `
-      radial-gradient(circle, transparent 30%, rgba(255, 94, 0, 0.0) 40%, rgba(255, 94, 0, 0.12) 50%, rgba(255, 140, 0, 0.08) 60%, transparent 72%),
-      conic-gradient(from 0deg, rgba(255, 94, 0, 0.15), rgba(255, 140, 0, 0.08), rgba(255, 94, 0, 0.2), rgba(255, 140, 0, 0.05), rgba(255, 94, 0, 0.15))
-    `,
-    filter: 'blur(30px)',
-    animation: 'coronaRotate 60s linear infinite, subtlePulse 4s ease-in-out infinite',
-    zIndex: 1,
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-  coronaInner: {
-    position: 'absolute',
-    width: '520px',
-    height: '520px',
-    borderRadius: '50%',
-    background: `
-      radial-gradient(circle, transparent 35%, rgba(255, 94, 0, 0.2) 48%, rgba(255, 140, 0, 0.12) 55%, transparent 68%)
-    `,
-    filter: 'blur(18px)',
-    animation: 'coronaRotate 40s linear infinite reverse, subtlePulse 3s ease-in-out infinite 1s',
-    zIndex: 2,
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-  flares: {
-    position: 'absolute',
-    width: '700px',
-    height: '700px',
-    borderRadius: '50%',
-    background: `
-      conic-gradient(from 45deg, transparent 0deg, rgba(255, 94, 0, 0.08) 20deg, transparent 40deg,
-        transparent 80deg, rgba(255, 140, 0, 0.06) 100deg, transparent 120deg,
-        transparent 180deg, rgba(255, 94, 0, 0.1) 200deg, transparent 220deg,
-        transparent 280deg, rgba(255, 140, 0, 0.07) 300deg, transparent 320deg)
-    `,
-    filter: 'blur(40px)',
-    animation: 'coronaRotate 80s linear infinite',
-    zIndex: 0,
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-  core: {
-    position: 'relative',
-    width: '380px',
-    height: '380px',
-    borderRadius: '50%',
-    background: `radial-gradient(circle at 40% 35%, #111 0%, #050505 40%, #000 100%)`,
-    boxShadow: `
-      inset 0 0 60px rgba(0, 0, 0, 1),
-      0 0 60px rgba(255, 94, 0, 0.2),
-      0 0 120px rgba(255, 94, 0, 0.1),
-      0 0 200px rgba(255, 140, 0, 0.06)
-    `,
-    zIndex: 3,
-    animation: 'pulseGlow 6s ease-in-out infinite',
-  },
-  rimLight: {
-    position: 'absolute',
-    inset: '-3px',
-    borderRadius: '50%',
-    background: `conic-gradient(from 200deg, transparent 0deg, rgba(255, 94, 0, 0.6) 30deg, rgba(255, 140, 0, 0.4) 60deg, transparent 120deg, transparent 180deg, rgba(255, 94, 0, 0.2) 240deg, transparent 300deg)`,
-    filter: 'blur(4px)',
-    zIndex: 2,
-  },
-  ambientGlow: {
-    position: 'absolute',
-    width: '900px',
-    height: '900px',
-    borderRadius: '50%',
-    background: `radial-gradient(circle, rgba(255, 94, 0, 0.04) 0%, rgba(255, 140, 0, 0.02) 30%, transparent 60%)`,
-    zIndex: -1,
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    pointerEvents: 'none',
-  },
-};
-
-/* ── Responsive overrides ── */
-const mobileOverrides = {
-  corona: { width: '400px', height: '400px' },
-  coronaInner: { width: '320px', height: '320px' },
-  flares: { width: '440px', height: '440px' },
-  core: { width: '240px', height: '240px' },
-  ambientGlow: { width: '550px', height: '550px' },
-};
+import { useEffect, useRef, useState } from 'react';
 
 export default function Eclipse() {
   const wrapperRef = useRef(null);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const coreRef = useRef(null);
+  const flaresRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => 
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
 
-  const getStyle = (key) => {
-    const base = ECLIPSE_CSS[key];
-    const mobile = isMobile ? mobileOverrides[key] : undefined;
-    return mobile ? { ...base, ...mobile } : base;
-  };
-
-  // Parallax on mousemove
   useEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper || isMobile) return;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-    let ticking = false;
+  // Smooth mouse parallax with 3D tilt
+  useEffect(() => {
+    if (isMobile) return;
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let animId;
 
     const handleMouseMove = (e) => {
-      if (ticking) return;
-      ticking = true;
-
-      requestAnimationFrame(() => {
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        const dx = (e.clientX - cx) / cx;
-        const dy = (e.clientY - cy) / cy;
-
-        wrapper.style.transform = `translate(${dx * 8}px, ${dy * 6}px)`;
-        ticking = false;
-      });
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      targetX = (e.clientX - cx) / cx;
+      targetY = (e.clientY - cy) / cy;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const updateParallax = () => {
+      // Lerp for butter-smooth movement
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      if (wrapperRef.current) {
+        wrapperRef.current.style.transform = `translate(${currentX * 18}px, ${currentY * 14}px)`;
+      }
+      if (coreRef.current) {
+        coreRef.current.style.transform = `perspective(1000px) rotateY(${currentX * 12}deg) rotateX(${-currentY * 10}deg)`;
+      }
+      if (flaresRef.current) {
+        flaresRef.current.style.transform = `translate(-50%, -50%) translate(${currentX * -10}px, ${currentY * -8}px)`;
+      }
+
+      animId = requestAnimationFrame(updateParallax);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    animId = requestAnimationFrame(updateParallax);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animId);
+    };
   }, [isMobile]);
+
+  const coreSize = isMobile ? '260px' : '420px';
+  const coronaSize = isMobile ? '440px' : '720px';
+  const innerCoronaSize = isMobile ? '340px' : '560px';
+  const ambientSize = isMobile ? '580px' : '980px';
 
   return (
     <div
       ref={wrapperRef}
-      style={ECLIPSE_CSS.wrapper}
+      style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        willChange: 'transform',
+      }}
       aria-hidden="true"
     >
-      {/* Ambient glow */}
-      <div style={getStyle('ambientGlow')} />
+      {/* 1. Deep Ambient Cosmic Magma Glow */}
+      <div
+        style={{
+          position: 'absolute',
+          width: ambientSize,
+          height: ambientSize,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255, 94, 0, 0.12) 0%, rgba(255, 140, 0, 0.05) 35%, transparent 68%)',
+          filter: 'blur(60px)',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 0,
+        }}
+      />
 
-      {/* Outer flares */}
-      <div style={getStyle('flares')} />
+      {/* 2. Anamorphic Cinematic Lens Flare Beam */}
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobile ? '100vw' : '1200px',
+          height: '2px',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255, 94, 0, 0.1) 15%, rgba(255, 140, 0, 0.5) 45%, #FFFFFF 50%, rgba(255, 140, 0, 0.5) 55%, rgba(255, 94, 0, 0.1) 85%, transparent 100%)',
+          boxShadow: '0 0 24px rgba(255, 94, 0, 0.7), 0 0 60px rgba(255, 140, 0, 0.4)',
+          zIndex: 1,
+          opacity: 0.85,
+          filter: 'blur(0.5px)',
+        }}
+      />
 
-      {/* Outer corona */}
-      <div style={getStyle('corona')} />
+      {/* 3. Outer Rotating Solar Corona */}
+      <div
+        style={{
+          position: 'absolute',
+          width: coronaSize,
+          height: coronaSize,
+          borderRadius: '50%',
+          background: `
+            radial-gradient(circle, transparent 32%, rgba(255, 94, 0, 0.02) 42%, rgba(255, 94, 0, 0.22) 52%, rgba(255, 140, 0, 0.12) 62%, transparent 75%),
+            conic-gradient(from 0deg, rgba(255, 94, 0, 0.22), rgba(255, 140, 0, 0.1), rgba(255, 94, 0, 0.28), rgba(255, 42, 0, 0.08), rgba(255, 140, 0, 0.2), rgba(255, 94, 0, 0.22))
+          `,
+          filter: 'blur(36px)',
+          animation: 'coronaRotate 50s linear infinite, subtlePulse 5s ease-in-out infinite',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 2,
+        }}
+      />
 
-      {/* Inner corona */}
-      <div style={getStyle('coronaInner')} />
+      {/* 4. Multi-Faceted Corona Flares */}
+      <div
+        ref={flaresRef}
+        style={{
+          position: 'absolute',
+          width: coronaSize,
+          height: coronaSize,
+          borderRadius: '50%',
+          background: `
+            conic-gradient(from 30deg, transparent 0deg, rgba(255, 94, 0, 0.14) 25deg, transparent 50deg,
+              transparent 80deg, rgba(255, 140, 0, 0.12) 110deg, transparent 130deg,
+              transparent 175deg, rgba(255, 94, 0, 0.18) 205deg, transparent 235deg,
+              transparent 270deg, rgba(255, 140, 0, 0.14) 300deg, transparent 330deg)
+          `,
+          filter: 'blur(28px)',
+          animation: 'coronaRotate 75s linear infinite reverse',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 3,
+        }}
+      />
 
-      {/* Core monolith */}
-      <div style={getStyle('core')}>
-        {/* Rim light */}
-        <div style={ECLIPSE_CSS.rimLight} />
+      {/* 5. Inner Solar Ring (Sharp & Radiant) */}
+      <div
+        style={{
+          position: 'absolute',
+          width: innerCoronaSize,
+          height: innerCoronaSize,
+          borderRadius: '50%',
+          background: `
+            radial-gradient(circle, transparent 40%, rgba(255, 94, 0, 0.35) 50%, rgba(255, 160, 0, 0.2) 58%, transparent 68%)
+          `,
+          filter: 'blur(16px)',
+          animation: 'coronaRotate 30s linear infinite, subtlePulse 3.5s ease-in-out infinite 0.5s',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 4,
+        }}
+      />
+
+      {/* 6. Core Obsidian Monolith Sphere */}
+      <div
+        ref={coreRef}
+        style={{
+          position: 'relative',
+          width: coreSize,
+          height: coreSize,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle at 35% 30%, #1e1e24 0%, #0a0a0d 45%, #000000 85%)',
+          boxShadow: `
+            inset 0 0 80px rgba(0, 0, 0, 1),
+            inset 0 0 30px rgba(255, 94, 0, 0.15),
+            0 0 70px rgba(255, 94, 0, 0.35),
+            0 0 140px rgba(255, 94, 0, 0.18),
+            0 0 240px rgba(255, 140, 0, 0.1)
+          `,
+          zIndex: 5,
+          animation: 'pulseGlow 5s ease-in-out infinite',
+          transition: 'transform 0.15s ease-out',
+        }}
+      >
+        {/* White-Hot Incandescent Crescent Rim Light */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '-2px',
+            borderRadius: '50%',
+            background: `conic-gradient(
+              from 215deg,
+              transparent 0deg,
+              rgba(255, 255, 255, 0.95) 20deg,
+              rgba(255, 160, 0, 0.85) 45deg,
+              rgba(255, 94, 0, 0.5) 75deg,
+              transparent 120deg,
+              transparent 230deg,
+              rgba(255, 94, 0, 0.3) 280deg,
+              transparent 330deg
+            )`,
+            filter: 'blur(3px)',
+            zIndex: 6,
+          }}
+        />
+
+        {/* Inner Eclipse Shading & Micro-Texture */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '3px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 45% 45%, #050505 0%, #000000 100%)',
+            zIndex: 7,
+          }}
+        />
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ function AnimatedIndicator({ indicator, delay = 0 }) {
   );
 }
 
-export default function EnterpriseDemo({ isOpen }) {
+export default function EnterpriseDemo({ isOpen, onClose }) {
   const [activeHotspot, setActiveHotspot] = useState(hotspots[0]?.id || null);
 
   // Stepper state
@@ -78,6 +78,23 @@ export default function EnterpriseDemo({ isOpen }) {
   return (
     <div className={`ent-demo ${isOpen ? 'ent-open' : ''}`}>
       <div className="ent-inner ent-grid-bg">
+
+        {/* Top Control Bar when embedded */}
+        {onClose && (
+          <div className="demo-control-bar">
+            <div className="demo-control-bar-label">
+              <span className="demo-control-bar-dot" />
+              <span>MODO DEMO ATIVO · SEDE DIGITAL CORPORATIVA B2B</span>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="demo-close-btn"
+            >
+              ✕ Recolher Demo
+            </button>
+          </div>
+        )}
 
         {/* ══ 1. TERMINAL STATUS BAR ══ */}
         <div className="ent-status-bar">
@@ -294,6 +311,30 @@ export default function EnterpriseDemo({ isOpen }) {
             {footer.ctaLabel}
           </a>
         </div>
+
+        {/* Bottom Collapse Button */}
+        {onClose && (
+          <div style={{ textAlign: 'center', marginTop: '40px', paddingBottom: '20px' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-secondary"
+              style={{
+                borderColor: 'rgba(255, 94, 0, 0.4)',
+                color: 'var(--amber)',
+                fontSize: '13px',
+                padding: '14px 28px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(20, 20, 24, 0.8)',
+                cursor: 'pointer',
+              }}
+            >
+              ✕ Recolher Demo e Voltar ao Início das Soluções ↑
+            </button>
+          </div>
+        )}
 
       </div>
     </div>

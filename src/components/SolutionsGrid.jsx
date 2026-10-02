@@ -9,8 +9,6 @@ import EnterpriseDemo from './EnterpriseDemo';
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(useGSAP);
 
-const WA_LINK = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20estou%20pronto%20para%20experimentar%20o%20novo%20na%20minha%20empresa.';
-
 const bulletStyle = {
   display: 'flex',
   alignItems: 'center',
@@ -37,37 +35,77 @@ export default function SolutionsGrid() {
   const [mkOpen, setMkOpen] = useState(false);
   const mkRef = useRef(null);
 
+  // ResizeObserver to automatically notify ScrollTrigger of any height change
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+
+    let rAF;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(rAF);
+      rAF = requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    });
+
+    ro.observe(el);
+    return () => {
+      cancelAnimationFrame(rAF);
+      ro.disconnect();
+    };
+  }, []);
+
+  // Sync ScrollTrigger on expand / collapse states
+  useEffect(() => {
+    ScrollTrigger.refresh();
+    const t1 = setTimeout(() => ScrollTrigger.refresh(), 80);
+    const t2 = setTimeout(() => ScrollTrigger.refresh(), 200);
+    const t3 = setTimeout(() => ScrollTrigger.refresh(), 450);
+    const t4 = setTimeout(() => ScrollTrigger.refresh(), 800);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
+  }, [entOpen, mkOpen]);
+
   // Auto-open if navigated via #enterprise, #midiakit or custom events
   useEffect(() => {
     const checkHash = () => {
       if (window.location.hash === '#enterprise' || window.location.hash === '#empresas') {
+        setMkOpen(false);
         setEntOpen(true);
         setTimeout(() => {
           entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
+        }, 150);
       } else if (window.location.hash === '#midiakit') {
+        setEntOpen(false);
         setMkOpen(true);
         setTimeout(() => {
           mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
+        }, 150);
       }
     };
     checkHash();
     window.addEventListener('hashchange', checkHash);
 
     const handleCustomOpenMk = () => {
+      setEntOpen(false);
       setMkOpen(true);
       setTimeout(() => {
         mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300);
+      }, 150);
     };
     window.addEventListener('open-midiakit', handleCustomOpenMk);
 
     const handleCustomOpenEnt = () => {
+      setMkOpen(false);
       setEntOpen(true);
       setTimeout(() => {
         entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300);
+      }, 150);
     };
     window.addEventListener('open-enterprise', handleCustomOpenEnt);
 
@@ -111,27 +149,39 @@ export default function SolutionsGrid() {
   }, { scope: sectionRef });
 
   const handleExpandEnt = () => {
-    setEntOpen((prev) => {
-      const next = !prev;
-      if (next) {
-        setTimeout(() => {
-          entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 200);
-      }
-      return next;
-    });
+    if (entOpen) {
+      setEntOpen(false);
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      setMkOpen(false);
+      setEntOpen(true);
+      setTimeout(() => {
+        entRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
+    }
   };
 
   const handleExpandMK = () => {
-    setMkOpen((prev) => {
-      const next = !prev;
-      if (next) {
-        setTimeout(() => {
-          mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 200);
-      }
-      return next;
-    });
+    if (mkOpen) {
+      setMkOpen(false);
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      setEntOpen(false);
+      setMkOpen(true);
+      setTimeout(() => {
+        mkRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
+    }
+  };
+
+  const handleCloseEnt = () => {
+    setEntOpen(false);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleCloseMK = () => {
+    setMkOpen(false);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -467,12 +517,12 @@ export default function SolutionsGrid() {
 
         {/* ══ ENTERPRISE DEMO (EXPANDABLE) ══ */}
         <div ref={entRef} id="enterprise">
-          <EnterpriseDemo isOpen={entOpen} />
+          <EnterpriseDemo isOpen={entOpen} onClose={handleCloseEnt} />
         </div>
 
         {/* ══ MEDIA KIT DEMO (EXPANDABLE) ══ */}
         <div ref={mkRef} id="midiakit">
-          <MediaKitDemo isOpen={mkOpen} />
+          <MediaKitDemo isOpen={mkOpen} onClose={handleCloseMK} />
         </div>
       </div>
     </section>

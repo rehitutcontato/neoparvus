@@ -9,6 +9,7 @@ gsap.registerPlugin(useGSAP);
 export default function ProblemSection() {
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
+  const pinnedRef = useRef(null);
   const textContainerRef = useRef(null);
   const imagesRef = useRef([]);
   const sequenceRef = useRef({ frame: 0 });
@@ -109,12 +110,13 @@ export default function ProblemSection() {
     return () => {
       window.removeEventListener('resize', render);
     };
-  }, [isLoaded]);
+  }, { scope: wrapperRef, dependencies: [isLoaded] });
 
   return (
     <section ref={wrapperRef} className="section-border" style={{ position: 'relative', height: '600vh', background: 'var(--void)' }}>
       {/* Pinned Container */}
       <div 
+        ref={pinnedRef}
         className="pinned-content"
         style={{
           position: 'absolute',
