@@ -362,6 +362,42 @@ export default function Hero() {
             <span>⚡ Demo Mídia Kit Interativo</span>
             <span style={{ fontSize: '12px' }}>↓</span>
           </button>
+
+          <a
+            href="#trabalhos"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '7px 16px',
+              borderRadius: '100px',
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              color: '#34d399',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.25s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.18)';
+              e.currentTarget.style.borderColor = '#10B981';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.08)';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+              e.currentTarget.style.color = '#34d399';
+            }}
+          >
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+            <span>✦ 4 Clientes Ativos em Produção</span>
+            <span style={{ fontSize: '12px' }}>↓</span>
+          </a>
         </div>
 
         {/* 3 Industrial Trust & Proof Bento Cards */}

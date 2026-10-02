@@ -4,9 +4,10 @@ const WA_LINK = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20estou%20
 
 const navLinks = [
   { label: 'SOLUÇÕES', href: '#solucoes' },
-  { label: 'DEMO B2B', href: '#enterprise', isNew: true },
-  { label: 'MÍDIA KIT', href: '#midiakit', isNew: true },
-  { label: 'PROJETOS', href: '#entregas' },
+  { label: 'CASES REAIS', href: '#trabalhos', isNew: true },
+  { label: 'DEMO B2B', href: '#enterprise' },
+  { label: 'MÍDIA KIT', href: '#midiakit' },
+  { label: 'ENTREGAS', href: '#entregas' },
   { label: 'SOBRE', href: '#sobre' },
   { label: 'INSTAGRAM', href: 'https://instagram.com/parvuspace' },
 ];

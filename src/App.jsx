@@ -12,6 +12,7 @@ import OpeningDoor from './components/OpeningDoor';
 import ProblemSection from './components/ProblemSection';
 import SolutionsGrid from './components/SolutionsGrid';
 import Deliverables from './components/Deliverables';
+import ClientProjects from './components/ClientProjects';
 import Investment from './components/Investment';
 import About from './components/About';
 import Process from './components/Process';
@@ -92,6 +93,7 @@ export default function App() {
 
         <SolutionsGrid />
         <Deliverables />
+        <ClientProjects />
         <Investment />
         <About />
         <Process />
