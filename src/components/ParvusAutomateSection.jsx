@@ -200,6 +200,39 @@ app.listen(3000, () => console.log('Parvus Automate API: Online port 3000'));`;
       <div className="automate-grid-overlay" />
 
       <div className="automate-container">
+        {/* ══ CHAPTER PROLOGUE & CORRELATION BRIDGE ══ */}
+        <div className="automate-prologue-wrap">
+          <div className="automate-conduit-line" />
+          <div className="automate-chapter-tag">
+            <span>CAPÍTULO 04 • O NÚCLEO DA ENGENHARIA</span>
+          </div>
+
+          <div className="automate-story-card">
+            <h3 className="automate-story-headline">
+              Como construímos ecossistemas digitais e mecatrônicos em dias, enquanto agências levam meses?
+            </h3>
+            <p className="automate-story-body">
+              Você acabou de conhecer as soluções que a Parvus Space entrega. No mercado tradicional, erguer 
+              aplicações desse calibre exigiria meses de reuniões, orçamentos inflados e semanas de depuração de código frágil. 
+              Nós rompemos essa limitação desenvolvendo nosso próprio motor autônomo de inteligência artificial: o <strong>Parvus Automate AI</strong>.
+            </p>
+            <div className="automate-correlations-row">
+              <div className="automate-correlation-item">
+                <span className="correlation-label">⚡ 1. SÍNTESE IMEDIATA</span>
+                <span className="correlation-desc">Compilação nativa de firmware C++ mecatrônico e SPAs completas em segundos.</span>
+              </div>
+              <div className="automate-correlation-item">
+                <span className="correlation-label">🛡️ 2. ZERO TEMPLATES</span>
+                <span className="correlation-desc">Código 100% limpo, sem temas comprados ou dependências que quebram amanhã.</span>
+              </div>
+              <div className="automate-correlation-item">
+                <span className="correlation-label">🚀 3. PROVADO NA PRÁTICA</span>
+                <span className="correlation-desc">A tecnologia exata que sustenta cada um dos Cases Reais que você verá adiante.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* ══ HEADER ══ */}
         <header className="automate-header">
           <div className="automate-pill-badge">
@@ -675,6 +708,18 @@ app.listen(3000, () => console.log('Parvus Automate API: Online port 3000'));`;
               <span>Falar no WhatsApp Oficial</span>
             </a>
           </div>
+        </div>
+
+        {/* ══ NARRATIVE OUTRO (BRIDGE TO DELIVERABLES & CASES) ══ */}
+        <div className="automate-outro-bridge">
+          <div className="outro-bridge-tag">TRANSIÇÃO DE ENGENHARIA // DO MOTOR AO MUNDO REAL</div>
+          <p className="outro-bridge-text">
+            Com o Parvus Automate operando em nosso núcleo, o que antes era um gargalo de semanas tornou-se um processo de precisão milimétrica.
+            Veja a seguir o padrão rigoroso de entrega que todo cliente Parvus Space recebe:
+          </p>
+          <a href="#entregas" className="outro-bridge-arrow">
+            <span>Ver Entregáveis & Padrão de Engenharia ↓</span>
+          </a>
         </div>
       </div>
 

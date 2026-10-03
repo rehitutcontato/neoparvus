@@ -8,6 +8,14 @@ import './ClientProjects.css';
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(useGSAP);
 
+const TECH_STACK_MAP = {
+  'parvus-automate': ['ESP32 FreeRTOS C++', 'Wokwi Simulator', 'Web Serial API', 'Express REST', 'Supabase SQL', 'White-Label'],
+  'marina-flores': ['Dark Luxury Botânica', 'Concierge WhatsApp', 'Rosas Colombianas', 'Next.js Fast', 'Zero Templates'],
+  'isa-fogaca': ['Porsche 911 Showcase', 'Mídia Kit Interativo', 'Brutalist Supercar', 'Conversão 5 Dígitos', 'Zero PDF'],
+  'gc-semijoias': ['Vitrine Ouro 18k & Ródio', 'Checkout WhatsApp', '0% Taxa Marketplace', 'Certificado 1 Ano'],
+  'sep-3d': ['Manufatura Aditiva', 'Resina & FDM', 'Kit Corporativo B2B', 'Orçamento 3 Passos'],
+};
+
 export default function ClientProjects() {
   const sectionRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -92,37 +100,47 @@ export default function ClientProjects() {
       <div className="clients-container">
         {/* ══ HEADER ══ */}
         <header className="clients-header">
+          <div className="clients-conduit-line" />
+
+          <div className="clients-chapter-tag">
+            <span>CAPÍTULO 06 • EVIDÊNCIA EM PRODUÇÃO</span>
+          </div>
+
           <div className="clients-badge-wrap">
             <span className="clients-live-dot" />
-            <span className="clients-badge-text">CASES REAIS EM PRODUÇÃO</span>
+            <span className="clients-badge-text">CLUSTER OPERACIONAL // SISTEMAS ATIVOS NO AR</span>
           </div>
 
           <h2 className="clients-title">
-            Projetos Reais.{' '}
-            <span className="text-gradient-magma">Resultados no Ar.</span>
+            Engenharia em Ação.{' '}
+            <span className="text-gradient-magma">Casos Reais no Ar.</span>
           </h2>
 
           <p className="clients-subtitle">
-            Conheça empresas, marcas de prestígio e criadores que confiaram na Parvus Space para substituir templates genéricos por ecossistemas digitais proprietários de altíssima conversão.
+            Aqui a teoria termina e a validação de mercado começa. Todas as aplicações abaixo foram projetadas sem templates genéricos, com código próprio de altíssima performance e arquitetura orientada à conversão — viabilizadas pela velocidade e precisão do nosso motor autônomo.
           </p>
 
           {/* Quick HUD Metrics */}
           <div className="clients-hud-stats">
             <div className="clients-hud-pill">
-              <span className="clients-hud-pill-highlight">4 / 4</span>
-              <span>Clientes em Produção</span>
+              <span className="clients-hud-pill-highlight">5 / 5</span>
+              <span>Sistemas Ativos</span>
             </div>
             <div className="clients-hud-pill">
               <span className="clients-hud-pill-highlight">0%</span>
               <span>Templates Prontos</span>
             </div>
             <div className="clients-hud-pill">
-              <span className="clients-hud-pill-highlight">&lt; 0.8s</span>
+              <span className="clients-hud-pill-highlight">&lt; 0.72s</span>
               <span>Velocidade de Carga</span>
             </div>
             <div className="clients-hud-pill">
-              <span className="clients-hud-pill-highlight">WhatsApp Direct</span>
+              <span className="clients-hud-pill-highlight">Concierge Direct</span>
               <span>Zero Atrito Comercial</span>
+            </div>
+            <div className="clients-hud-pill">
+              <span className="clients-hud-pill-highlight">99.98%</span>
+              <span>Uptime Auditado</span>
             </div>
           </div>
 
@@ -135,28 +153,34 @@ export default function ClientProjects() {
               Todos os Cases ({CLIENT_PROJECTS.length})
             </button>
             <button
+              className={`clients-filter-btn ${activeCategory === 'deep-tech' ? 'active' : ''}`}
+              onClick={() => setActiveCategory('deep-tech')}
+            >
+              ⚡ Deep-Tech & IA (1)
+            </button>
+            <button
               className={`clients-filter-btn ${activeCategory === 'alto-padrao' ? 'active' : ''}`}
               onClick={() => setActiveCategory('alto-padrao')}
             >
-              Alto Luxo & Varejo
+              👑 Alto Padrão & Varejo
             </button>
             <button
               className={`clients-filter-btn ${activeCategory === 'creator' ? 'active' : ''}`}
               onClick={() => setActiveCategory('creator')}
             >
-              Creator & Supercarros
+              🏎️ Creator & Supercarros
             </button>
             <button
               className={`clients-filter-btn ${activeCategory === 'vitrine' ? 'active' : ''}`}
               onClick={() => setActiveCategory('vitrine')}
             >
-              Vitrine Semijoias
+              💎 Vitrine Semijoias
             </button>
             <button
               className={`clients-filter-btn ${activeCategory === '3d' ? 'active' : ''}`}
               onClick={() => setActiveCategory('3d')}
             >
-              Manufatura 3D
+              ⚙️ Manufatura 3D
             </button>
           </div>
         </header>
@@ -173,6 +197,16 @@ export default function ClientProjects() {
                 '--card-accent-border': project.accentBorder,
               }}
             >
+              {/* Correlation Method Tag */}
+              <div className={`client-method-tag ${project.category === 'deep-tech' ? 'is-deep-tech' : 'is-client'}`}>
+                <span className="live-mini-dot" style={{ background: project.accentColor, boxShadow: `0 0 8px ${project.accentColor}` }} />
+                <span>
+                  {project.category === 'deep-tech'
+                    ? 'MOTOR AUTÔNOMO PROPRIETÁRIO // V2.4 ONLINE'
+                    : 'ECOSSISTEMA GERADO COM A METODOLOGIA PARVUS AUTOMATE'}
+                </span>
+              </div>
+
               {/* Browser Chrome Header */}
               <div className="client-card-browser-bar">
                 <div className="browser-dots">
@@ -184,10 +218,11 @@ export default function ClientProjects() {
                 <div className="browser-address" title={project.url}>
                   <span>🔒</span>
                   <span>{project.url.replace('https://', '')}</span>
+                  <span className="browser-ping">ping: 24ms</span>
                 </div>
 
                 <span className="browser-status-tag">
-                  <span className="clients-live-dot" style={{ width: '5px', height: '5px' }} />
+                  <span className="clients-live-dot" style={{ width: '5px', height: '5px', background: project.accentColor, boxShadow: `0 0 8px ${project.accentColor}` }} />
                   ONLINE
                 </span>
               </div>
@@ -235,6 +270,18 @@ export default function ClientProjects() {
 
               {/* Card Body */}
               <div className="client-card-body">
+                {/* Tech Stack Pills Strip */}
+                {TECH_STACK_MAP[project.id] && (
+                  <div className="client-tech-strip">
+                    <span className="tech-strip-label">STACK:</span>
+                    <div className="tech-strip-items">
+                      {TECH_STACK_MAP[project.id].map((tech, idx) => (
+                        <span key={idx} className="tech-pill">{tech}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Location / History */}
                 <div className="client-origin-bar">
                   <span className="client-origin-icon">📍</span>

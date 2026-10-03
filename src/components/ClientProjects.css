@@ -38,6 +38,31 @@
   margin: 0 auto 60px;
 }
 
+.clients-conduit-line {
+  width: 1px;
+  height: 50px;
+  margin: 0 auto 20px;
+  background: linear-gradient(180deg, rgba(255, 94, 0, 0.6) 0%, rgba(16, 185, 129, 0.4) 60%, transparent 100%);
+  box-shadow: 0 0 10px rgba(255, 94, 0, 0.4);
+}
+
+.clients-chapter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: rgba(255, 94, 0, 0.08);
+  border: 1px solid rgba(255, 94, 0, 0.25);
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
 .clients-badge-wrap {
   display: inline-flex;
   align-items: center;
@@ -181,9 +206,91 @@
 }
 
 .client-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--card-accent-ghost);
+  transform: translateY(-6px);
+  border-color: var(--card-accent-border, rgba(255, 255, 255, 0.25));
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), 0 0 40px var(--card-accent-ghost);
+}
+
+/* Correlation Method Tag at top of Card */
+.client-method-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.client-method-tag.is-deep-tech {
+  background: rgba(0, 255, 136, 0.08);
+  color: #00ff88;
+}
+
+.client-method-tag.is-client {
+  background: rgba(255, 94, 0, 0.06);
+  color: var(--amber);
+}
+
+.live-mini-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.browser-ping {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: #00ff88;
+  margin-left: 6px;
+  opacity: 0.85;
+}
+
+/* Tech Stack Strip */
+.client-tech-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tech-strip-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--zinc-tech);
+  letter-spacing: 0.08em;
+}
+
+.tech-strip-items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-pill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--titanium-90);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tech-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
 }
 
 /* Card Browser Mockup Header */

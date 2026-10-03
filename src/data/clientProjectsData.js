@@ -5,6 +5,42 @@
 
 export const CLIENT_PROJECTS = [
   {
+    id: 'parvus-automate',
+    name: 'Parvus Automate AI',
+    tagline: 'Plataforma Autônoma de Engenharia de Software & IoT',
+    category: 'deep-tech',
+    categoryBadge: 'DEEP-TECH / MOTOR PROPRIETÁRIO',
+    location: 'Ecossistema Parvus Space • V2.4',
+    url: 'https://parvusautomateai2.vercel.app/',
+    accentColor: '#00FF88',
+    accentGhost: 'rgba(0, 255, 136, 0.14)',
+    accentBorder: 'rgba(0, 255, 136, 0.35)',
+    status: 'ONLINE EM PRODUÇÃO',
+    clientOrigin: 'Sistema Central de Engenharia Autônoma da Parvus Space',
+    summary: 'A plataforma pioneira que elimina o gargalo do desenvolvimento convencional gerando SPAs React, microsserviços Node.js e firmware C++ mecatrônico para ESP32 em menos de 48 segundos com gravação serial direta via USB no navegador.',
+    challenge: 'Empresas e agências perdem meses contratando equipes multidisciplinares caras para prototipar soluções integradas de software e hardware, enfrentando falhas de pinagem, retrabalho e altos custos operacionais.',
+    solution: 'Criamos um motor de IA com simulação mecatrônica Wokwi, compilação de código nativo, Web Serial API para gravação USB sem drivers e exportação white-label completa com Dockerfile e Supabase.',
+    deliverables: [
+      'Compilação autônoma de firmware ESP32 em C++',
+      'Integração mecatrônica e esquemáticos SVG para Wokwi',
+      'Gravação direta via USB no navegador com Web Serial API',
+      'Microsserviços Express e banco relacional Supabase SQL',
+      'Exportação ZIP white-label com Dockerfile e sem marcas',
+      'Arquitetura industrial sem dependências quebradas',
+    ],
+    metrics: [
+      { label: 'Compilação', value: '48.2s', detail: 'Do briefing ao código compilado' },
+      { label: 'Hardware', value: 'Web Serial', detail: 'Gravação USB direto no browser' },
+      { label: 'Precisão', value: '100%', detail: 'Código compilável sem erros' },
+      { label: 'Licença', value: 'Comercial', detail: 'White-label irrestrito para agências' },
+    ],
+    highlights: [
+      'Firmware ESP32 com FreeRTOS e MQTT',
+      'Diagrama SVG mecatrônico compatível com Wokwi',
+      'Gravação via Web Serial API no Google Chrome',
+    ],
+  },
+  {
     id: 'marina-flores',
     name: 'Marina Flores',
     tagline: 'Floricultura de Alto Padrão & Garden Center',

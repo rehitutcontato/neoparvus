@@ -181,6 +181,26 @@ export default function Deliverables() {
             paddingBottom: '80px',
           }}
         >
+          <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: 'var(--amber)',
+                background: 'rgba(255, 94, 0, 0.08)',
+                padding: '5px 14px',
+                borderRadius: '4px',
+                border: '1px solid rgba(255, 94, 0, 0.25)',
+                display: 'inline-block',
+              }}
+            >
+              CAPÍTULO 05 • O PADRÃO DA ENTREGA
+            </span>
+          </div>
+
           <h2
             className="headline-lg"
             style={{ 
