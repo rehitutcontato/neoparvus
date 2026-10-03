@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,163 +10,153 @@ const WA_LINK = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20compreen
 
 const milestones = [
   {
-    step: 'ETAPA 01 // BREAK-EVEN',
+    step: 'ETAPA 01',
+    tabLabel: '01. R$ 15k',
     value: 'R$ 15.000',
     title: '1 ÚNICO CONTRATO DE ALTO VALOR',
     copy: 'Um único contrato comercial ou cliente de ticket médio recupera 100% do setup investido e já injeta R$ 9.000 de lucro líquido livre no seu caixa.',
     roiBadge: '2.5x RETORNO // PAYBACK IMEDIATO',
     highlight: 'Recuperação integral do investimento no 1º fechamento.',
-    nodePercent: 12,
+    paybackSummary: '+R$ 9.000 LÍQUIDO // 2.5X RETORNO',
   },
   {
-    step: 'ETAPA 02 // ALAVANCAGEM',
+    step: 'ETAPA 02',
+    tabLabel: '02. R$ 50k',
     value: 'R$ 50.000',
     title: 'A PLATAFORMA SE PAGA MÚLTIPLAS VEZES',
     copy: 'A autoridade de design editorial-tech e o carregamento instantâneo convertem visitantes frios em compradores qualificados sem hesitação.',
     roiBadge: '8.3x RETORNO // EXPANSÃO DE MARGEM',
     highlight: 'Posicionamento premium que elimina objeção de preço.',
-    nodePercent: 38,
+    paybackSummary: '+R$ 44.000 LÍQUIDO // 8.3X RETORNO',
   },
   {
-    step: 'ETAPA 03 // ESCALA PREVISÍVEL',
+    step: 'ETAPA 03',
+    tabLabel: '03. R$ 200k+',
     value: 'R$ 200.000+',
-    title: 'LUCRO LÍQUIDO PURO E OPERAÇÃO ATIVA',
-    copy: 'O mesmo ecossistema digital continua captando e gerando negócios todos os meses, sem pagar mensalidades de plataformas ou comissões a intermediários.',
+    title: 'LUCRO LÍQUIDO PURO E ESCALA PREVISÍVEL',
+    copy: 'O mesmo ecossistema digital continua gerando negócios todos os meses, sem pagar mensalidades de plataformas ou comissões a intermediários.',
     roiBadge: '33.3x RETORNO // MÁQUINA DE RECEITA',
     highlight: 'Zero royalties ou custos recorrentes de hospedagem fechada.',
-    nodePercent: 65,
+    paybackSummary: '+R$ 194.000 LÍQUIDO // 33.3X RETORNO',
   },
   {
-    step: 'ETAPA 04 // PATRIMÔNIO DIGITAL',
+    step: 'ETAPA 04',
+    tabLabel: '04. ESCALA',
     value: 'ESCALA EXPONENCIAL',
     title: 'VALUATION & ATIVO PERPÉTUO',
-    copy: 'Isso não é um custo publicitário descartável. É um ativo de engenharia de software de alta performance incorporado ao valor de mercado da sua empresa.',
+    copy: 'Isso não é uma despesa descartável de tráfego. É um ativo de engenharia de software de alta performance incorporado ao patrimônio da sua empresa.',
     roiBadge: 'ROI INFINITO // ATIVO DE VALUATION',
     highlight: 'Propriedade intelectual 100% sua com código fonte transferido.',
-    nodePercent: 92,
-  },
-];
-
-const roiPresets = [
-  {
-    label: '1 Fechamento',
-    ticket: 'R$ 15.000',
-    profit: 'R$ 9.000 líquido',
-    roi: '2.5x',
-    desc: 'Basta 1 contrato para liquidar o setup e lucrar.',
-  },
-  {
-    label: '3 Fechamentos',
-    ticket: 'R$ 30.000',
-    profit: 'R$ 24.000 líquido',
-    roi: '5.0x',
-    desc: 'Operação acelerada no primeiro trimestre.',
-  },
-  {
-    label: 'Escala 6 Meses',
-    ticket: 'R$ 100.000+',
-    profit: 'R$ 94.000+ líquido',
-    roi: '16.6x',
-    desc: 'O site transforma-se no seu canal comercial nº 1.',
+    paybackSummary: 'VALUATION PERPÉTUO // ROI INFINITO',
   },
 ];
 
 export default function Investment() {
   const containerRef = useRef(null);
-  const [activeSim, setActiveSim] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const scrollTriggerRef = useRef(null);
 
   useGSAP(() => {
-    // Responsive check for desktop pinning vs mobile flow
     const mm = gsap.matchMedia();
 
     mm.add('(min-width: 821px)', () => {
-      // Beam line starts at 0%
+      // Beam initial height
       gsap.set('.invest-beam-line', { height: '0%' });
-      
-      // Milestones start softly visible as blueprints (never an empty black void)
-      gsap.set('.invest-milestone-card', { opacity: 0.28, y: 15, scale: 0.98 });
-      gsap.set('.invest-node-glow', { scale: 0.5, opacity: 0 });
-      gsap.set('.invest-connector-line', { scaleX: 0, transformOrigin: 'left center' });
+
+      // Cards initial positions: Card 0 is visible, 1-3 are hidden
+      gsap.set('.invest-spotlight-card', { opacity: 0, y: 25, pointerEvents: 'none' });
+      gsap.set('.invest-spotlight-card.card-0', { opacity: 1, y: 0, pointerEvents: 'all' });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.5,
+          scrub: 0.4,
           pin: '.invest-pinned',
+          onUpdate: (self) => {
+            scrollTriggerRef.current = self;
+            // Map scroll progress (0..1) to step index (0..3)
+            const p = self.progress;
+            let step = 0;
+            if (p >= 0.72) step = 3;
+            else if (p >= 0.45) step = 2;
+            else if (p >= 0.20) step = 1;
+            else step = 0;
+            setActiveStep(step);
+          }
         }
       });
 
-      // 1. Ascent Energy Beam travels up the spine smoothly
+      // 1. Ascent Beam travels smoothly
       tl.to('.invest-beam-line', {
         height: '100%',
-        duration: 4,
+        duration: 3,
         ease: 'none',
       }, 0);
 
-      // 2. Milestones ignite sequentially without dead space
-      const cards = gsap.utils.toArray('.invest-milestone-card');
-      const nodes = gsap.utils.toArray('.invest-node-glow');
-      const connectors = gsap.utils.toArray('.invest-connector-line');
+      // 2. Step transitions between the 4 cards (clean, no overlap, fits 100vh)
+      // Step 0 -> Step 1 (around t = 0.8)
+      tl.to('.invest-spotlight-card.card-0', {
+        opacity: 0,
+        y: -25,
+        duration: 0.35,
+        ease: 'power2.in',
+        pointerEvents: 'none',
+      }, 0.7);
+      tl.to('.invest-spotlight-card.card-1', {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: 'power2.out',
+        pointerEvents: 'all',
+      }, 0.85);
 
-      cards.forEach((card, i) => {
-        // First card starts immediately at 0.15 (zero wait time!)
-        const startAt = 0.15 + (i * 0.95);
+      // Step 1 -> Step 2 (around t = 1.6)
+      tl.to('.invest-spotlight-card.card-1', {
+        opacity: 0,
+        y: -25,
+        duration: 0.35,
+        ease: 'power2.in',
+        pointerEvents: 'none',
+      }, 1.5);
+      tl.to('.invest-spotlight-card.card-2', {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: 'power2.out',
+        pointerEvents: 'all',
+      }, 1.65);
 
-        // Beam sensor node lights up
-        if (nodes[i]) {
-          tl.to(nodes[i], {
-            scale: 1.4,
-            opacity: 1,
-            duration: 0.35,
-            ease: 'back.out(2)',
-          }, startAt);
-        }
-
-        // Connector line fires towards card
-        if (connectors[i]) {
-          tl.to(connectors[i], {
-            scaleX: 1,
-            duration: 0.35,
-            ease: 'power2.out',
-          }, startAt + 0.1);
-        }
-
-        // Card enters active spotlight focus
-        tl.to(card, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.55,
-          ease: 'power2.out',
-          onStart: () => card.classList.add('active-focus'),
-        }, startAt + 0.15);
-
-        // Previous card recedes into solid background presence
-        if (i > 0) {
-          tl.to(cards[i - 1], {
-            opacity: 0.65,
-            scale: 0.985,
-            duration: 0.4,
-            onComplete: () => cards[i - 1].classList.remove('active-focus'),
-          }, startAt);
-        }
-      });
+      // Step 2 -> Step 3 (around t = 2.4)
+      tl.to('.invest-spotlight-card.card-2', {
+        opacity: 0,
+        y: -25,
+        duration: 0.35,
+        ease: 'power2.in',
+        pointerEvents: 'none',
+      }, 2.3);
+      tl.to('.invest-spotlight-card.card-3', {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: 'power2.out',
+        pointerEvents: 'all',
+      }, 2.45);
     });
 
     mm.add('(max-width: 820px)', () => {
-      // Mobile smooth card entry
-      gsap.utils.toArray('.invest-milestone-card').forEach((card) => {
-        gsap.fromTo(card, 
-          { opacity: 0.3, y: 30 },
+      // Mobile: standard vertical stack with clean scroll entrance
+      gsap.utils.toArray('.invest-mobile-card').forEach((card) => {
+        gsap.fromTo(card,
+          { opacity: 0.3, y: 25 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            duration: 0.5,
             scrollTrigger: {
               trigger: card,
-              start: 'top 80%',
+              start: 'top 85%',
               toggleActions: 'play none none reverse',
             }
           }
@@ -177,6 +167,17 @@ export default function Investment() {
     return () => mm.revert();
   }, { scope: containerRef });
 
+  // Direct tab click navigation
+  const handleTabClick = (index) => {
+    setActiveStep(index);
+    if (scrollTriggerRef.current && containerRef.current) {
+      const st = scrollTriggerRef.current;
+      const targetProgress = index === 0 ? 0.05 : index === 1 ? 0.35 : index === 2 ? 0.60 : 0.88;
+      const scrollPos = st.start + (targetProgress * (st.end - st.start));
+      window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="investimento" ref={containerRef} className="invest-section">
       <div className="invest-pinned">
@@ -185,7 +186,7 @@ export default function Investment() {
         <div className="invest-grid-lines" />
         <div className="invest-vignette" />
 
-        {/* Top Chapter Tag */}
+        {/* Top Chapter Tag (positioned cleanly under Navbar) */}
         <div className="invest-top-tag-wrap">
           <div className="invest-chapter-tag">
             <span className="chapter-ping-dot" />
@@ -196,7 +197,7 @@ export default function Investment() {
         <div className="invest-container">
           <div className="invest-stage">
             {/* ══════════════════════════════════════════════════════════════
-                LEFT: 6K ANCHOR CARD (PERMANENTLY VISIBLE, EXECUTIVE SUITE)
+                LEFT: 6K ANCHOR CARD (PERMANENTLY VISIBLE, COMPACT & LUXURIOUS)
                 ══════════════════════════════════════════════════════════════ */}
             <div className="invest-anchor-pane">
               <div className="invest-anchor-card">
@@ -216,38 +217,14 @@ export default function Investment() {
                   É O PONTO DE PARTIDA, NÃO O TETO.
                 </div>
 
-                {/* ── Interactive ROI Presets Simulator ── */}
-                <div className="anchor-sim-box">
-                  <div className="anchor-sim-label">
-                    <span>SIMULADOR DE PAYBACK REAL:</span>
-                    <span className="anchor-sim-roi">{roiPresets[activeSim].roi} ROI</span>
+                {/* Dynamic Payback Readout connected to current active milestone */}
+                <div className="anchor-dynamic-payback">
+                  <div className="payback-label-row">
+                    <span className="payback-meta">RETORNO ESTIMADO:</span>
+                    <span className="payback-step-indicator">ETAPA 0{activeStep + 1}</span>
                   </div>
-                  
-                  <div className="anchor-sim-tabs">
-                    {roiPresets.map((preset, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        className={`anchor-sim-tab ${activeSim === idx ? 'active' : ''}`}
-                        onClick={() => setActiveSim(idx)}
-                      >
-                        {preset.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="anchor-sim-readout">
-                    <div className="sim-readout-col">
-                      <span className="sim-meta">Faturamento</span>
-                      <span className="sim-val highlight">{roiPresets[activeSim].ticket}</span>
-                    </div>
-                    <div className="sim-readout-col">
-                      <span className="sim-meta">Resultado</span>
-                      <span className="sim-val green">{roiPresets[activeSim].profit}</span>
-                    </div>
-                  </div>
-                  <div className="sim-desc-text">
-                    ⚡ {roiPresets[activeSim].desc}
+                  <div className="payback-value-text">
+                    ⚡ {milestones[activeStep].paybackSummary}
                   </div>
                 </div>
 
@@ -256,19 +233,15 @@ export default function Investment() {
                 <div className="anchor-specs-list">
                   <div className="anchor-spec-item">
                     <span className="anchor-spec-check">✓</span>
-                    <span>Código 100% de sua propriedade (Sem lock-in)</span>
+                    <span>Código 100% proprietário (Sem lock-in)</span>
                   </div>
                   <div className="anchor-spec-item">
                     <span className="anchor-spec-check">✓</span>
-                    <span>Zero mensalidades ou taxas ocultas de plataforma</span>
+                    <span>Zero mensalidades ou taxas de terceiros</span>
                   </div>
                   <div className="anchor-spec-item">
                     <span className="anchor-spec-check">✓</span>
-                    <span>Design mecatrônico & editorial de alto luxo</span>
-                  </div>
-                  <div className="anchor-spec-item">
-                    <span className="anchor-spec-check">✓</span>
-                    <span>Entrega rápida viabilizada pelo Parvus Automate</span>
+                    <span>Motor acelerador Parvus Automate</span>
                   </div>
                 </div>
 
@@ -280,30 +253,25 @@ export default function Investment() {
                 >
                   <span>Iniciar Projeto por R$ 6.000 ↗</span>
                 </a>
-
-                <div className="anchor-footer-note">
-                  🔒 Garantia de Entrega &middot; Contrato PJ com NF &middot; Suporte Pablo Parvus
-                </div>
               </div>
             </div>
 
             {/* ══════════════════════════════════════════════════════════════
-                CENTER: THE ASCENT BEAM (CHART SPINE & SENSOR NODES)
+                CENTER: ASCENT LASER BEAM (CHART SPINE)
                 ══════════════════════════════════════════════════════════════ */}
             <div className="invest-beam-track">
-              {/* Vertical Guide Track */}
               <div className="invest-beam-rail">
                 <div className="invest-beam-line">
                   <div className="invest-beam-head" />
                 </div>
               </div>
 
-              {/* Sensor Nodes along the rail */}
-              {milestones.map((m, i) => (
-                <div 
-                  key={i} 
-                  className={`invest-beam-node-wrap node-${i}`}
-                  style={{ bottom: `${m.nodePercent}%` }}
+              {/* 4 Sensor nodes aligned with the 4 steps */}
+              {[0, 1, 2, 3].map((idx) => (
+                <div
+                  key={idx}
+                  className={`invest-beam-node-wrap node-${idx} ${activeStep >= idx ? 'active' : ''}`}
+                  style={{ bottom: `${10 + idx * 27}%` }}
                 >
                   <div className="invest-node-glow" />
                   <div className="invest-node-core" />
@@ -313,40 +281,79 @@ export default function Investment() {
             </div>
 
             {/* ══════════════════════════════════════════════════════════════
-                RIGHT: MILESTONES LADDER (HIGH-IMPACT CARDS)
+                RIGHT: SPOTLIGHT MILESTONE STAGE (ELEVATOR DECK — NO CLIPPING)
                 ══════════════════════════════════════════════════════════════ */}
-            <div className="invest-milestones-pane">
-              {milestones.map((m, i) => (
-                <div key={i} className={`invest-milestone-card card-${i}`}>
-                  <div className="milestone-step-tag">{m.step}</div>
-                  <div className="milestone-top-row">
-                    <div className="milestone-value">{m.value}</div>
-                    <div className="milestone-roi-badge">{m.roiBadge}</div>
+            <div className="invest-spotlight-pane">
+              {/* Step Selector Tabs */}
+              <div className="spotlight-tabs-bar">
+                {milestones.map((m, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`spotlight-tab ${activeStep === idx ? 'active' : ''}`}
+                    onClick={() => handleTabClick(idx)}
+                  >
+                    <span className="tab-dot" />
+                    <span>{m.tabLabel}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Viewport Frame: only the active card is shown with generous space */}
+              <div className="invest-spotlight-frame">
+                {milestones.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`invest-spotlight-card card-${i} ${activeStep === i ? 'in-view' : ''}`}
+                  >
+                    <div className="spotlight-card-header">
+                      <div className="milestone-step-tag">{m.step} // TRAJETÓRIA DE VALOR</div>
+                      <div className="milestone-roi-badge">{m.roiBadge}</div>
+                    </div>
+
+                    <div className="spotlight-card-value">{m.value}</div>
+                    <div className="spotlight-card-title">{m.title}</div>
+                    <p className="spotlight-card-desc">{m.copy}</p>
+
+                    <div className="spotlight-card-footer">
+                      <span className="highlight-bolt">⚡</span>
+                      <span>{m.highlight}</span>
+                    </div>
                   </div>
-                  <div className="milestone-sub">{m.title}</div>
-                  <p className="milestone-desc">{m.copy}</p>
-                  <div className="milestone-highlight-bar">
-                    <span className="highlight-bolt">⚡</span>
-                    <span>{m.highlight}</span>
-                  </div>
+                ))}
+              </div>
+
+              {/* Bottom Progress Tracker inside pane */}
+              <div className="spotlight-footer-tracker">
+                <div className="tracker-bars">
+                  {milestones.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`tracker-bar-segment ${activeStep >= idx ? 'filled' : ''}`}
+                      onClick={() => handleTabClick(idx)}
+                    />
+                  ))}
                 </div>
-              ))}
+                <div className="tracker-label">
+                  ROLE PARA AVANÇAR PELA EQUAÇÃO (ETAPA {activeStep + 1} DE 4)
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════
-            BOTTOM HUD COMPARATIVE BAR
+            BOTTOM HUD COMPARATIVE SUMMARY (COMPACT & PROPORTIONAL)
             ══════════════════════════════════════════════════════════════ */}
         <div className="invest-hud-bottom">
           <div className="invest-hud-pill">
             <span className="hud-label">AGÊNCIA CONVENCIONAL:</span>
-            <span className="invest-hud-val amber">R$ 120.000+/ANO (LENTA & DEPENDENTE)</span>
+            <span className="invest-hud-val amber">R$ 120.000+/ANO (LENTA)</span>
           </div>
 
           <div className="invest-hud-pill">
             <span className="hud-label">PARVUS SPACE:</span>
-            <span className="invest-hud-val green">R$ 6.000 (ATIVO PERPÉTUO PROPRIETÁRIO)</span>
+            <span className="invest-hud-val green">R$ 6.000 (ATIVO PERPÉTUO)</span>
           </div>
 
           <div className="invest-hud-pill">
@@ -354,6 +361,27 @@ export default function Investment() {
             <span className="invest-hud-val green">2.5X A 33.3X+ COMPROVADO</span>
           </div>
         </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          MOBILE FALLBACK LIST (Rendered only on < 820px)
+          ══════════════════════════════════════════════════════════════ */}
+      <div className="invest-mobile-list">
+        {milestones.map((m, i) => (
+          <div key={i} className="invest-mobile-card">
+            <div className="milestone-step-tag">{m.step}</div>
+            <div className="milestone-top-row">
+              <div className="milestone-value">{m.value}</div>
+              <div className="milestone-roi-badge">{m.roiBadge}</div>
+            </div>
+            <div className="milestone-sub">{m.title}</div>
+            <p className="milestone-desc">{m.copy}</p>
+            <div className="milestone-highlight-bar">
+              <span className="highlight-bolt">⚡</span>
+              <span>{m.highlight}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
