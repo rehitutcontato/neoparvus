@@ -11,6 +11,7 @@ import Hero from './components/Hero';
 import OpeningDoor from './components/OpeningDoor';
 import ProblemSection from './components/ProblemSection';
 import SolutionsGrid from './components/SolutionsGrid';
+import ParvusAutomateSection from './components/ParvusAutomateSection';
 import Deliverables from './components/Deliverables';
 import ClientProjects from './components/ClientProjects';
 import Investment from './components/Investment';
@@ -92,6 +93,7 @@ export default function App() {
         <ProblemSection />
 
         <SolutionsGrid />
+        <ParvusAutomateSection />
         <Deliverables />
         <ClientProjects />
         <Investment />

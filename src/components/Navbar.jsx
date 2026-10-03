@@ -4,7 +4,8 @@ const WA_LINK = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20estou%20
 
 const navLinks = [
   { label: 'SOLUÇÕES', href: '#solucoes' },
-  { label: 'CASES REAIS', href: '#trabalhos', isNew: true },
+  { label: 'AUTOMATE AI', href: '#automate-ai', isNew: true },
+  { label: 'CASES REAIS', href: '#trabalhos' },
   { label: 'DEMO B2B', href: '#enterprise' },
   { label: 'MÍDIA KIT', href: '#midiakit' },
   { label: 'ENTREGAS', href: '#entregas' },
