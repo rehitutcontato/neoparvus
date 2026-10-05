@@ -92,6 +92,13 @@ export default function ClientProjects() {
     };
   }, [activeEmbed]);
 
+  // Keep ScrollTrigger synchronized after ClientProjects mounts and whenever active project changes
+  useEffect(() => {
+    ScrollTrigger.refresh();
+    const t = setTimeout(() => ScrollTrigger.refresh(), 200);
+    return () => clearTimeout(t);
+  }, [activeProjectId]);
+
   useGSAP(() => {
     // Header reveal
     gsap.from('.clients-header > *', {

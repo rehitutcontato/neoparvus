@@ -56,6 +56,19 @@ export default function Investment() {
   const [activeStep, setActiveStep] = useState(0);
   const scrollTriggerRef = useRef(null);
 
+  // Refresh ScrollTrigger on mount and after layout settlement
+  useEffect(() => {
+    ScrollTrigger.refresh();
+    const t1 = setTimeout(() => ScrollTrigger.refresh(), 100);
+    const t2 = setTimeout(() => ScrollTrigger.refresh(), 350);
+    const t3 = setTimeout(() => ScrollTrigger.refresh(), 700);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
   useGSAP(() => {
     const mm = gsap.matchMedia();
 
@@ -74,14 +87,15 @@ export default function Investment() {
           end: 'bottom bottom',
           scrub: 0.4,
           pin: '.invest-pinned',
+          anticipatePin: 1,
           onUpdate: (self) => {
             scrollTriggerRef.current = self;
             // Map scroll progress (0..1) to step index (0..3)
             const p = self.progress;
             let step = 0;
-            if (p >= 0.72) step = 3;
-            else if (p >= 0.45) step = 2;
-            else if (p >= 0.20) step = 1;
+            if (p >= 0.75) step = 3;
+            else if (p >= 0.48) step = 2;
+            else if (p >= 0.22) step = 1;
             else step = 0;
             setActiveStep(step);
           }
@@ -91,7 +105,7 @@ export default function Investment() {
       // 1. Ascent Beam travels smoothly
       tl.to('.invest-beam-line', {
         height: '100%',
-        duration: 3,
+        duration: 3.5,
         ease: 'none',
       }, 0);
 
@@ -103,46 +117,46 @@ export default function Investment() {
         duration: 0.35,
         ease: 'power2.in',
         pointerEvents: 'none',
-      }, 0.7);
+      }, 0.75);
       tl.to('.invest-spotlight-card.card-1', {
         opacity: 1,
         y: 0,
         duration: 0.35,
         ease: 'power2.out',
         pointerEvents: 'all',
-      }, 0.85);
+      }, 0.95);
 
-      // Step 1 -> Step 2 (around t = 1.6)
+      // Step 1 -> Step 2 (around t = 1.7)
       tl.to('.invest-spotlight-card.card-1', {
         opacity: 0,
         y: -25,
         duration: 0.35,
         ease: 'power2.in',
         pointerEvents: 'none',
-      }, 1.5);
-      tl.to('.invest-spotlight-card.card-2', {
-        opacity: 1,
-        y: 0,
-        duration: 0.35,
-        ease: 'power2.out',
-        pointerEvents: 'all',
       }, 1.65);
+      tl.to('.invest-spotlight-card.card-2', {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: 'power2.out',
+        pointerEvents: 'all',
+      }, 1.85);
 
-      // Step 2 -> Step 3 (around t = 2.4)
+      // Step 2 -> Step 3 (around t = 2.6)
       tl.to('.invest-spotlight-card.card-2', {
         opacity: 0,
         y: -25,
         duration: 0.35,
         ease: 'power2.in',
         pointerEvents: 'none',
-      }, 2.3);
+      }, 2.55);
       tl.to('.invest-spotlight-card.card-3', {
         opacity: 1,
         y: 0,
         duration: 0.35,
         ease: 'power2.out',
         pointerEvents: 'all',
-      }, 2.45);
+      }, 2.75);
     });
 
     mm.add('(max-width: 820px)', () => {
@@ -172,7 +186,7 @@ export default function Investment() {
     setActiveStep(index);
     if (scrollTriggerRef.current && containerRef.current) {
       const st = scrollTriggerRef.current;
-      const targetProgress = index === 0 ? 0.05 : index === 1 ? 0.35 : index === 2 ? 0.60 : 0.88;
+      const targetProgress = index === 0 ? 0.05 : index === 1 ? 0.32 : index === 2 ? 0.60 : 0.88;
       const scrollPos = st.start + (targetProgress * (st.end - st.start));
       window.scrollTo({ top: scrollPos, behavior: 'smooth' });
     }
