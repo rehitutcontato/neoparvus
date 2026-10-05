@@ -28,6 +28,10 @@ export default function Footer() {
       style={{
         padding: '32px 0',
         borderTop: '1px solid var(--glass-border)',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
       }}
     >
       <div
@@ -39,6 +43,9 @@ export default function Footer() {
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '16px',
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box'
         }}
       >
         <p

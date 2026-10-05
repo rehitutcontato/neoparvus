@@ -9,6 +9,9 @@
   border-top: 1px solid rgba(255, 94, 0, 0.15);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 /* Ambient glow effects */
@@ -17,7 +20,8 @@
   top: -150px;
   left: 50%;
   transform: translateX(-50%);
-  width: 900px;
+  width: min(900px, 90vw);
+  max-width: 100%;
   height: 380px;
   background: radial-gradient(ellipse at center, rgba(255, 94, 0, 0.15), rgba(0, 255, 136, 0.05) 50%, transparent 70%);
   filter: blur(80px);
@@ -28,8 +32,9 @@
 .automate-ambient-bottom {
   position: absolute;
   bottom: -100px;
-  right: -50px;
-  width: 600px;
+  right: 0;
+  width: min(600px, 80vw);
+  max-width: 100%;
   height: 400px;
   background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.07), transparent 70%);
   filter: blur(100px);
@@ -53,8 +58,10 @@
   position: relative;
   z-index: 1;
   max-width: 1240px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 /* ── NARRATIVE SCROLL-TELLING PROLOGUE ── */
@@ -465,6 +472,9 @@
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 64px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   transition: border-color 0.3s ease;
 }
 
@@ -1174,3 +1184,130 @@
   border: none;
   background: #050505;
 }
+
+/* ── RESPONSIVE MOBILE ADAPTATIONS ── */
+@media (max-width: 768px) {
+  .automate-section {
+    padding: 80px 0 100px;
+  }
+
+  .automate-container {
+    padding: 0 16px;
+  }
+
+  .automate-story-card {
+    padding: 24px 18px;
+    margin-bottom: 30px;
+  }
+
+  .automate-header {
+    margin-bottom: 40px;
+  }
+
+  .automate-pill-badge {
+    padding: 6px 14px;
+    font-size: 11px;
+    max-width: 100%;
+  }
+
+  .automate-stat-col {
+    padding: 16px 12px;
+  }
+
+  .automate-stat-value {
+    font-size: 26px;
+  }
+
+  .terminal-workspace {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+
+  .terminal-tab-btn {
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+
+  .code-scrollable {
+    padding: 12px;
+    font-size: 11px;
+    max-height: 280px;
+  }
+
+  .automate-pillar-card {
+    padding: 24px 20px;
+  }
+
+  .automate-comparison-box {
+    padding: 24px 18px;
+    margin-bottom: 40px;
+  }
+
+  .automate-bottom-banner {
+    padding: 28px 20px;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .bottom-banner-text p {
+    margin: 0 auto;
+  }
+
+  .bottom-banner-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bottom-banner-actions button,
+  .bottom-banner-actions a {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-titlebar {
+    padding: 10px 12px;
+  }
+
+  .terminal-title {
+    font-size: 10px;
+  }
+
+  .terminal-badge-live {
+    display: none;
+  }
+
+  .btn-trigger-serial {
+    font-size: 10px;
+    padding: 10px 12px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .serial-status-text {
+    font-size: 10px;
+  }
+
+  .automate-modal-backdrop {
+    padding: 8px;
+  }
+
+  .automate-modal-window {
+    height: 94vh;
+  }
+
+  .automate-modal-bar {
+    padding: 8px 12px;
+  }
+
+  .modal-url-pill {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+

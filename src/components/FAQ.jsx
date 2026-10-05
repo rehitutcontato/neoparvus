@@ -27,13 +27,26 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="section section-border">
-      <div className="container">
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <section 
+      id="faq" 
+      className="section section-border" 
+      style={{ 
+        width: '100%', 
+        maxWidth: '100vw', 
+        overflow: 'hidden', 
+        boxSizing: 'border-box' 
+      }}
+    >
+      <div className="container" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+        <div style={{ maxWidth: '800px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
           <h2
             data-reveal
             className="headline-lg"
-            style={{ marginBottom: '48px' }}
+            style={{ 
+              marginBottom: 'clamp(28px, 5vw, 48px)',
+              fontSize: 'clamp(1.8rem, 5vw, 3rem)',
+              wordBreak: 'break-word'
+            }}
           >
             Perguntas frequentes
           </h2>

@@ -8,20 +8,32 @@ const socialLinks = [
 
 export default function About() {
   return (
-    <section id="sobre" className="section section-border" style={{ position: 'relative' }}>
-      <div className="container">
+    <section 
+      id="sobre" 
+      className="section section-border" 
+      style={{ 
+        position: 'relative',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
+      }}
+    >
+      <div className="container" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
         <div 
           data-reveal 
           className="glass-card" 
           style={{ 
             maxWidth: '1000px', 
+            width: '100%',
             margin: '0 auto', 
-            padding: '64px',
+            padding: 'clamp(24px, 5vw, 64px)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '40px',
+            gap: 'clamp(24px, 4vw, 40px)',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            boxSizing: 'border-box'
           }}
         >
           {/* Subtle flare inside card */}
@@ -29,8 +41,8 @@ export default function About() {
             position: 'absolute',
             top: 0,
             right: 0,
-            width: '300px',
-            height: '300px',
+            width: 'min(300px, 80vw)',
+            height: 'min(300px, 80vw)',
             background: 'radial-gradient(circle, rgba(255, 94, 0, 0.05) 0%, transparent 70%)',
             pointerEvents: 'none',
           }} />
@@ -39,7 +51,7 @@ export default function About() {
           <div>
             <h2
               className="headline-md"
-              style={{ marginBottom: '16px' }}
+              style={{ marginBottom: '16px', fontSize: 'clamp(1.5rem, 4vw, 2.2rem)', wordBreak: 'break-word' }}
             >
               Founder Led Operation
             </h2>
@@ -48,8 +60,9 @@ export default function About() {
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '12px',
+                gap: '8px 12px',
                 alignItems: 'center',
+                fontSize: 'clamp(10px, 2.5vw, 12px)'
               }}
             >
               <span style={{ color: 'var(--amber)' }}>PABLO VEROS</span>
@@ -61,17 +74,25 @@ export default function About() {
           </div>
 
           {/* Bio */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+          <div 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', 
+              gap: 'clamp(20px, 4vw, 40px)',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}
+          >
             <p
               className="body-text"
-              style={{ fontSize: '18px', fontWeight: 500, color: 'var(--titanium)' }}
+              style={{ fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 500, color: 'var(--titanium)', margin: 0, lineHeight: 1.6 }}
             >
               Você fala direto comigo. Não existe gerente de conta ou júnior entre a sua ideia e o
               código que sobe no ar.
             </p>
             <p
               className="body-sm"
-              style={{ fontSize: '16px' }}
+              style={{ fontSize: 'clamp(13px, 2.8vw, 16px)', margin: 0, lineHeight: 1.6 }}
             >
               Sou um engenheiro que também pensa em posicionamento de marca, porque código limpo 
               sem percepção de valor não sustenta preço alto. Construo para fundadores e criadores no 
@@ -86,8 +107,10 @@ export default function About() {
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '32px',
+              gap: 'clamp(16px, 4vw, 32px)',
               alignItems: 'center',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
             {socialLinks.map(({ label, href }) => (
@@ -98,7 +121,7 @@ export default function About() {
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '13px',
+                  fontSize: 'clamp(11px, 2.8vw, 13px)',
                   fontWeight: 600,
                   letterSpacing: '0.04em',
                   color: 'var(--titanium-70)',

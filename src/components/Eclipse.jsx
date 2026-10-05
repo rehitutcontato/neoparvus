@@ -60,10 +60,10 @@ export default function Eclipse() {
     };
   }, [isMobile]);
 
-  const coreSize = isMobile ? '260px' : '420px';
-  const coronaSize = isMobile ? '440px' : '720px';
-  const innerCoronaSize = isMobile ? '340px' : '560px';
-  const ambientSize = isMobile ? '580px' : '980px';
+  const coreSize = isMobile ? '190px' : '420px';
+  const coronaSize = isMobile ? '300px' : '720px';
+  const innerCoronaSize = isMobile ? '240px' : '560px';
+  const ambientSize = isMobile ? '340px' : '980px';
 
   return (
     <div
@@ -74,10 +74,12 @@ export default function Eclipse() {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        maxWidth: '100%',
         height: '100%',
         pointerEvents: 'none',
         userSelect: 'none',
         willChange: 'transform',
+        overflow: 'hidden',
       }}
       aria-hidden="true"
     >
@@ -104,7 +106,8 @@ export default function Eclipse() {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          width: isMobile ? '100vw' : '1200px',
+          width: isMobile ? '100%' : '1200px',
+          maxWidth: '100%',
           height: '2px',
           background: 'linear-gradient(90deg, transparent 0%, rgba(255, 94, 0, 0.1) 15%, rgba(255, 140, 0, 0.5) 45%, #FFFFFF 50%, rgba(255, 140, 0, 0.5) 55%, rgba(255, 94, 0, 0.1) 85%, transparent 100%)',
           boxShadow: '0 0 24px rgba(255, 94, 0, 0.7), 0 0 60px rgba(255, 140, 0, 0.4)',

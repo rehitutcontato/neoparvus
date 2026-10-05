@@ -9,6 +9,9 @@
   overflow: hidden;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 .clients-ambient-glow {
@@ -16,7 +19,8 @@
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
-  width: 900px;
+  width: min(900px, 90vw);
+  max-width: 100%;
   height: 500px;
   background: radial-gradient(ellipse at center, rgba(255, 94, 0, 0.06) 0%, transparent 70%);
   pointer-events: none;
@@ -27,8 +31,10 @@
   position: relative;
   z-index: 1;
   max-width: 1240px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 /* ── Section Header ── */
@@ -825,7 +831,36 @@
   .clients-section {
     padding: 80px 0 100px;
   }
+
+  .clients-container {
+    padding: 0 16px;
+  }
   
+  .client-card-preview {
+    height: 180px;
+    padding: 16px;
+  }
+
+  .client-card-body {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .browser-address {
+    max-width: 160px;
+    font-size: 10px;
+  }
+
+  .clients-hud-stats {
+    margin: 24px 0 32px;
+    gap: 8px;
+  }
+
+  .clients-hud-pill {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
   .embed-modal-window {
     height: 96vh;
     border-radius: 8px;
@@ -833,5 +868,34 @@
 
   .embed-chrome-center {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .browser-address {
+    max-width: 120px;
+  }
+
+  .browser-status-tag {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .client-preview-name {
+    font-size: 20px;
+  }
+
+  .client-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clients-filters {
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+
+  .clients-filter-btn {
+    padding: 8px 12px;
+    font-size: 10px;
   }
 }

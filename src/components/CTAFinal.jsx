@@ -66,7 +66,10 @@ export default function CTAFinal() {
       style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: '160px 0',
+        padding: 'clamp(80px, 12vw, 160px) 0',
+        width: '100%',
+        maxWidth: '100vw',
+        boxSizing: 'border-box'
       }}
     >
       {/* Background radial glow */}
@@ -76,27 +79,32 @@ export default function CTAFinal() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '600px',
+          width: 'min(600px, 90vw)',
+          height: 'min(600px, 90vw)',
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(255, 94, 0, 0.1) 0%, transparent 60%)',
           pointerEvents: 'none',
         }}
       />
 
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
         <div
           style={{
             maxWidth: '1000px',
+            width: '100%',
             margin: '0 auto',
             textAlign: 'center',
+            boxSizing: 'border-box'
           }}
         >
           <h2
             className="headline-brutal cta-reveal"
             style={{ 
               marginBottom: '32px',
-              fontSize: 'clamp(3.5rem, 8vw, 6rem)'
+              fontSize: 'clamp(2.1rem, 6.5vw, 6rem)',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              lineHeight: 1.15
             }}
           >
             A PORTA PARA O <span className="magma-text">NOVO</span><br/>
@@ -109,8 +117,10 @@ export default function CTAFinal() {
               marginBottom: '48px',
               maxWidth: '600px',
               margin: '0 auto 56px',
-              fontSize: '20px',
-              lineHeight: 1.6
+              fontSize: 'clamp(15px, 3.8vw, 20px)',
+              lineHeight: 1.6,
+              wordBreak: 'break-word',
+              padding: '0 10px'
             }}
           >
             Você está a uma decisão de distância de ter uma presença implacável que 
@@ -123,10 +133,12 @@ export default function CTAFinal() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '32px'
+              gap: '24px',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
-            <div ref={btnWrapperRef} style={{ display: 'inline-block', padding: '16px' }}>
+            <div ref={btnWrapperRef} style={{ display: 'inline-block', padding: '8px', width: '100%', maxWidth: '460px', boxSizing: 'border-box' }}>
               <a
                 ref={btnRef}
                 href={WA_LINK}
@@ -135,8 +147,12 @@ export default function CTAFinal() {
                 className="btn-primary"
                 style={{
                   display: 'inline-flex',
-                  padding: '24px 64px',
-                  fontSize: '18px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  maxWidth: '100%',
+                  padding: 'clamp(16px, 4vw, 24px) clamp(20px, 5vw, 64px)',
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
                   background: 'var(--titanium)',
                   color: 'var(--void)',
                   border: 'none',
@@ -144,6 +160,10 @@ export default function CTAFinal() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.02em',
                   boxShadow: '0 0 50px rgba(255, 94, 0, 0.2), 0 0 100px rgba(255, 94, 0, 0.1)',
+                  boxSizing: 'border-box',
+                  textAlign: 'center',
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word'
                 }}
                 onMouseEnter={e => {
                   e.target.style.background = '#fff';
@@ -172,7 +192,9 @@ export default function CTAFinal() {
                 letterSpacing: '0.05em',
                 textDecoration: 'underline',
                 textUnderlineOffset: '4px',
-                transition: 'color 0.2s ease'
+                transition: 'color 0.2s ease',
+                textAlign: 'center',
+                padding: '0 10px'
               }}
               onMouseEnter={e => e.target.style.color = 'var(--amber)'}
               onMouseLeave={e => e.target.style.color = 'var(--zinc-tech)'}

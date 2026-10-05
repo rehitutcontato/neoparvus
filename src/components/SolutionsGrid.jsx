@@ -185,23 +185,23 @@ export default function SolutionsGrid() {
   };
 
   return (
-    <section id="solucoes" ref={sectionRef} className="section" style={{ position: 'relative', overflow: 'hidden' }}>
+    <section id="solucoes" ref={sectionRef} className="section" style={{ position: 'relative', overflow: 'hidden', width: '100%', maxWidth: '100vw', boxSizing: 'border-box' }}>
       {/* Deep ambient glow */}
       <div style={{
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '100vw',
-        height: '100vw',
-        maxWidth: '1200px',
-        maxHeight: '1200px',
+        width: 'min(900px, 90vw)',
+        height: 'min(900px, 90vw)',
+        maxWidth: '100%',
+        maxHeight: '100%',
         background: 'radial-gradient(circle, rgba(255,94,0,0.03) 0%, transparent 60%)',
         zIndex: 0,
         pointerEvents: 'none'
       }} />
 
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
         {/* ══ SECTION HEADER ══ */}
         <div style={{ textAlign: 'center', marginBottom: '80px' }}>
           <span
@@ -251,14 +251,17 @@ export default function SolutionsGrid() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
             gap: '32px',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {/* ── Card 01: Empresas High-Ticket ── */}
           <div
             className="gs-card"
-            style={{ transition: 'transform 0.4s ease', cursor: 'default' }}
+            style={{ transition: 'transform 0.4s ease', cursor: 'default', width: '100%', boxSizing: 'border-box' }}
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -269,9 +272,10 @@ export default function SolutionsGrid() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                padding: '48px',
+                padding: 'clamp(24px, 5vw, 48px)',
                 background: 'linear-gradient(180deg, rgba(20,20,20,0.8) 0%, rgba(5,5,5,0.9) 100%)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)'
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)',
+                boxSizing: 'border-box'
               }}
             >
               <div>
@@ -387,7 +391,7 @@ export default function SolutionsGrid() {
           {/* ── Card 02: Criadores & Personalidades ── */}
           <div
             className="gs-card"
-            style={{ transition: 'transform 0.4s ease', cursor: 'default' }}
+            style={{ transition: 'transform 0.4s ease', cursor: 'default', width: '100%', boxSizing: 'border-box' }}
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-10px)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
@@ -398,10 +402,11 @@ export default function SolutionsGrid() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                padding: '48px',
+                padding: 'clamp(24px, 5vw, 48px)',
                 background: 'linear-gradient(135deg, rgba(255, 94, 0, 0.08) 0%, rgba(5,5,5,0.9) 100%)',
                 boxShadow: 'inset 0 1px 0 rgba(255,94,0,0.2), 0 20px 40px rgba(0,0,0,0.5)',
                 position: 'relative',
+                boxSizing: 'border-box'
               }}
             >
               <div>

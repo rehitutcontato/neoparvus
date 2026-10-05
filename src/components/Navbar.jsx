@@ -38,6 +38,9 @@ export default function Navbar() {
           top: 0,
           left: 0,
           right: 0,
+          width: '100%',
+          maxWidth: '100vw',
+          boxSizing: 'border-box',
           zIndex: 100,
           background: scrolled ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.3)',
           backdropFilter: 'blur(20px)',
@@ -48,6 +51,8 @@ export default function Navbar() {
       >
         <div style={{
           maxWidth: '1200px',
+          width: '100%',
+          boxSizing: 'border-box',
           margin: '0 auto',
           padding: '0 20px',
           display: 'flex',

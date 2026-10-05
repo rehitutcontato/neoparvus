@@ -121,45 +121,55 @@ export default function Hero() {
           className="hero-reveal"
           style={{
             display: 'inline-flex',
+            flexWrap: 'wrap',
             alignItems: 'center',
-            gap: '12px',
-            padding: '6px 18px',
+            justifyContent: 'center',
+            gap: '8px 12px',
+            padding: '8px 16px',
             borderRadius: '100px',
-            background: 'rgba(10, 10, 10, 0.8)',
+            background: 'rgba(10, 10, 10, 0.85)',
             border: '1px solid var(--glass-border)',
             backdropFilter: 'blur(20px)',
-            marginBottom: '28px',
+            marginBottom: '24px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+            maxWidth: '92vw',
+            boxSizing: 'border-box',
+            textAlign: 'center',
           }}
         >
-          <span
-            style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: '#22c55e',
-              boxShadow: '0 0 10px #22c55e',
-              display: 'inline-block',
-            }}
-          />
-          <span
-            className="label-mono"
-            style={{
-              fontSize: '11px',
-              color: 'var(--titanium)',
-              letterSpacing: '0.12em',
-              fontWeight: 600,
-            }}
-          >
-            FOUNDER-LED STUDIO · 2026
-          </span>
-          <span style={{ color: 'var(--zinc-dark)' }}>·</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#22c55e',
+                boxShadow: '0 0 10px #22c55e',
+                display: 'inline-block',
+                flexShrink: 0,
+              }}
+            />
+            <span
+              className="label-mono"
+              style={{
+                fontSize: '11px',
+                color: 'var(--titanium)',
+                letterSpacing: '0.1em',
+                fontWeight: 600,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              FOUNDER-LED STUDIO · 2026
+            </span>
+          </div>
+          <span className="hide-mobile" style={{ color: 'var(--zinc-dark)' }}>·</span>
           <span
             className="label-mono"
             style={{
               fontSize: '11px',
               color: 'var(--zinc-tech)',
               letterSpacing: '0.08em',
+              whiteSpace: 'nowrap',
             }}
           >
             DISPONÍVEL PARA NOVOS ATIVOS
@@ -170,12 +180,14 @@ export default function Hero() {
         <p
           className="label-mono hero-reveal"
           style={{
-            marginBottom: '20px',
-            letterSpacing: '0.22em',
-            fontSize: '12px',
+            marginBottom: '18px',
+            letterSpacing: '0.16em',
+            fontSize: 'clamp(10px, 2.5vw, 12px)',
             color: 'var(--amber)',
             textShadow: '0 0 20px rgba(255, 94, 0, 0.4)',
             fontWeight: 600,
+            maxWidth: '100%',
+            wordBreak: 'break-word',
           }}
         >
           ESTRATÉGIA · DESIGN DE IMPACTO · ENGENHARIA PRÓPRIA
@@ -187,10 +199,12 @@ export default function Hero() {
           style={{
             maxWidth: '1000px',
             marginBottom: '24px',
-            fontSize: 'clamp(3rem, 7.5vw, 6.2rem)',
+            fontSize: 'clamp(2.1rem, 7vw, 6.2rem)',
             lineHeight: 1.02,
             letterSpacing: '-0.035em',
             textShadow: '0 4px 30px rgba(0, 0, 0, 0.8)',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
           }}
         >
           A PORTA PARA A EXPANSÃO<br />
@@ -203,9 +217,11 @@ export default function Hero() {
           style={{
             maxWidth: '720px',
             marginBottom: '32px',
-            fontSize: 'clamp(16px, 2vw, 19px)',
+            fontSize: 'clamp(15px, 2vw, 19px)',
             lineHeight: 1.7,
             color: 'var(--titanium-70)',
+            padding: '0 6px',
+            boxSizing: 'border-box',
           }}
         >
           Você está pronto para experimentar o novo na sua empresa? Construímos 
@@ -221,10 +237,12 @@ export default function Hero() {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: '16px',
+            gap: '14px',
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: '28px',
+            width: '100%',
+            maxWidth: '480px',
           }}
         >
           <a
@@ -233,8 +251,8 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="btn-primary"
             style={{
-              padding: '18px 44px',
-              fontSize: '15px',
+              padding: '16px 36px',
+              fontSize: '14px',
               textTransform: 'uppercase',
               fontWeight: 800,
               boxShadow: '0 0 45px rgba(255, 94, 0, 0.3)',
@@ -257,8 +275,8 @@ export default function Hero() {
             href="#solucoes"
             className="btn-secondary"
             style={{
-              padding: '18px 40px',
-              fontSize: '15px',
+              padding: '16px 32px',
+              fontSize: '14px',
               textTransform: 'uppercase',
               fontWeight: 600,
               borderRadius: 'var(--radius-sm)',
@@ -291,6 +309,9 @@ export default function Hero() {
             gap: '12px',
             justifyContent: 'center',
             marginBottom: '48px',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
           }}
         >
           <button
@@ -312,6 +333,8 @@ export default function Hero() {
               textTransform: 'uppercase',
               cursor: 'pointer',
               transition: 'all 0.25s ease',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = 'rgba(255, 94, 0, 0.18)';
@@ -347,6 +370,8 @@ export default function Hero() {
               textTransform: 'uppercase',
               cursor: 'pointer',
               transition: 'all 0.25s ease',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
@@ -382,6 +407,8 @@ export default function Hero() {
               textDecoration: 'none',
               cursor: 'pointer',
               transition: 'all 0.25s ease',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = 'rgba(16, 185, 129, 0.18)';
@@ -405,10 +432,11 @@ export default function Hero() {
           className="hero-reveal"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
             gap: '16px',
             width: '100%',
             maxWidth: '880px',
+            boxSizing: 'border-box',
           }}
         >
           {/* Card 1 */}

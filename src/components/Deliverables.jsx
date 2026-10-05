@@ -136,7 +136,11 @@ export default function Deliverables() {
       style={{ 
         position: 'relative',
         height: '400vh', // long scroll height for stacking
-        background: 'var(--void)'
+        background: 'var(--void)',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
       }}
     >
       <div 
@@ -145,10 +149,12 @@ export default function Deliverables() {
           top: 0,
           height: '100vh',
           width: '100%',
+          maxWidth: '100vw',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          boxSizing: 'border-box'
         }}
       >
         <canvas
@@ -157,6 +163,7 @@ export default function Deliverables() {
             position: 'absolute',
             inset: 0,
             width: '100%',
+            maxWidth: '100%',
             height: '100%',
             objectFit: 'cover',
             pointerEvents: 'none',
@@ -173,12 +180,14 @@ export default function Deliverables() {
             position: 'relative',
             zIndex: 10,
             width: '100%',
+            maxWidth: '100%',
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            paddingTop: '80px',
-            paddingBottom: '80px',
+            paddingTop: '40px',
+            paddingBottom: '40px',
+            boxSizing: 'border-box'
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '16px' }}>
@@ -195,6 +204,9 @@ export default function Deliverables() {
                 borderRadius: '4px',
                 border: '1px solid rgba(255, 94, 0, 0.25)',
                 display: 'inline-block',
+                maxWidth: '90vw',
+                wordBreak: 'break-word',
+                boxSizing: 'border-box'
               }}
             >
               CAPÍTULO 05 • O PADRÃO DA ENTREGA
@@ -204,15 +216,19 @@ export default function Deliverables() {
           <h2
             className="headline-lg"
             style={{ 
-              marginBottom: '64px',
+              marginBottom: 'clamp(24px, 5vw, 64px)',
               textAlign: 'center',
-              textShadow: '0 4px 40px rgba(0,0,0,0.8)'
+              textShadow: '0 4px 40px rgba(0,0,0,0.8)',
+              fontSize: 'clamp(1.4rem, 4vw, 2.5rem)',
+              wordBreak: 'break-word',
+              padding: '0 10px',
+              boxSizing: 'border-box'
             }}
           >
             Não é só uma página. É posicionamento.
           </h2>
 
-          <div style={{ position: 'relative', height: '400px', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+          <div style={{ position: 'relative', height: '360px', maxWidth: '800px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
             {items.map((item) => (
               <div
                 key={item.num}
@@ -228,35 +244,38 @@ export default function Deliverables() {
                   border: '1px solid rgba(255, 255, 255, 0.12)',
                   borderTop: '1px solid rgba(255, 94, 0, 0.35)',
                   boxShadow: '0 30px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
-                  borderRadius: '24px',
-                  padding: '40px',
+                  borderRadius: 'clamp(16px, 3vw, 24px)',
+                  padding: 'clamp(20px, 4vw, 40px)',
                   display: 'flex',
-                  gap: '32px',
+                  gap: 'clamp(14px, 3vw, 32px)',
                   alignItems: 'flex-start',
+                  boxSizing: 'border-box'
                 }}
               >
                 <span
                   className="label-mono"
                   style={{
                     color: 'var(--amber)',
-                    fontSize: '18px',
+                    fontSize: 'clamp(15px, 3vw, 18px)',
                     fontWeight: 700,
+                    flexShrink: 0
                   }}
                 >
                   {item.num}
                 </span>
-                <div>
+                <div style={{ minWidth: 0, flex: 1 }}>
                   <h3
                     style={{
-                      fontSize: '22px',
+                      fontSize: 'clamp(17px, 3.5vw, 22px)',
                       fontWeight: 700,
                       color: 'var(--titanium)',
-                      marginBottom: '12px',
+                      marginBottom: '8px',
+                      wordBreak: 'break-word'
                     }}
                   >
                     {item.title}
                   </h3>
-                  <p className="body-text" style={{ fontSize: '16px', margin: 0 }}>
+                  <p className="body-text" style={{ fontSize: 'clamp(13px, 2.8vw, 16px)', margin: 0, lineHeight: 1.55 }}>
                     {item.desc}
                   </p>
                 </div>

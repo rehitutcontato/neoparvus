@@ -113,7 +113,19 @@ export default function ProblemSection() {
   }, { scope: wrapperRef, dependencies: [isLoaded] });
 
   return (
-    <section ref={wrapperRef} className="section-border" style={{ position: 'relative', height: '600vh', background: 'var(--void)' }}>
+    <section 
+      ref={wrapperRef} 
+      className="section-border" 
+      style={{ 
+        position: 'relative', 
+        height: '600vh', 
+        background: 'var(--void)',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
+      }}
+    >
       {/* Pinned Container */}
       <div 
         ref={pinnedRef}
@@ -123,10 +135,12 @@ export default function ProblemSection() {
           top: 0,
           height: '100vh',
           width: '100%',
+          maxWidth: '100vw',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          boxSizing: 'border-box'
         }}
       >
         <canvas
@@ -135,6 +149,7 @@ export default function ProblemSection() {
             position: 'absolute',
             inset: 0,
             width: '100%',
+            maxWidth: '100%',
             height: '100%',
             objectFit: 'cover',
             pointerEvents: 'none',
@@ -145,25 +160,64 @@ export default function ProblemSection() {
         />
 
         {/* Cinematic Scenes Container */}
-        <div className="container" ref={textContainerRef} style={{ position: 'relative', zIndex: 10, height: '100vh' }}>
+        <div 
+          className="container" 
+          ref={textContainerRef} 
+          style={{ 
+            position: 'relative', 
+            zIndex: 10, 
+            height: '100vh',
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box'
+          }}
+        >
           
           {/* SCENE 1: Brutalist Magma Headline */}
-          <div className="scene-text scene-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto' }}>
-            <h2 className="headline-brutal magma-text" style={{ textAlign: 'center' }}>
+          <div className="scene-text scene-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto', boxSizing: 'border-box' }}>
+            <h2 
+              className="headline-brutal magma-text" 
+              style={{ 
+                textAlign: 'center',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+                fontSize: 'clamp(2rem, 6.5vw, 4.5rem)',
+                lineHeight: 1.15
+              }}
+            >
               O preço que você cobra<br/>começa antes da<br/>sua proposta.
             </h2>
           </div>
 
           {/* SCENE 2: Editorial Left Aligned */}
-          <div className="scene-text scene-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', height: '100%', left: 0, right: 0, margin: '0 auto' }}>
-            <h2 className="headline-lg" style={{ maxWidth: '800px', textAlign: 'left', lineHeight: 1.3 }}>
+          <div className="scene-text scene-2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto', boxSizing: 'border-box' }}>
+            <h2 
+              className="headline-lg" 
+              style={{ 
+                maxWidth: '800px', 
+                textAlign: 'left', 
+                lineHeight: 1.3,
+                fontSize: 'clamp(1.4rem, 4.5vw, 2.5rem)',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
+              }}
+            >
               Existe uma distância enorme entre ter um site bonitinho feito em template e ter um <span style={{ color: 'var(--amber)' }}>ativo digital de alta conversão.</span>
             </h2>
           </div>
 
           {/* SCENE 3: The Contrast */}
-          <div className="scene-text scene-3" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto' }}>
-            <h2 className="headline-lg" style={{ textAlign: 'center', maxWidth: '900px' }}>
+          <div className="scene-text scene-3" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto', boxSizing: 'border-box' }}>
+            <h2 
+              className="headline-lg" 
+              style={{ 
+                textAlign: 'center', 
+                maxWidth: '900px',
+                fontSize: 'clamp(1.3rem, 4vw, 2.4rem)',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
+              }}
+            >
               <span style={{ color: 'var(--zinc-dark)' }}>A primeira opção comunica esforço.</span>
               <br/><br/>
               <span className="magma-text" style={{ fontSize: '1.2em' }}>A segunda comunica resultado.</span>
@@ -171,20 +225,54 @@ export default function ProblemSection() {
           </div>
 
           {/* SCENE 4: Glassmorphism Floating Text */}
-          <div className="scene-text scene-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', height: '100%', left: 0, right: 0, margin: '0 auto' }}>
-            <div style={{ maxWidth: '500px', textAlign: 'left', padding: '40px', background: 'rgba(10, 10, 10, 0.4)', backdropFilter: 'blur(30px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', boxShadow: '0 30px 60px rgba(0,0,0,0.5)' }}>
-              <p className="body-text" style={{ fontSize: '24px', fontWeight: 500, margin: 0, color: 'var(--titanium)' }}>
+          <div className="scene-text scene-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto', boxSizing: 'border-box' }}>
+            <div 
+              style={{ 
+                width: '100%',
+                maxWidth: '520px', 
+                textAlign: 'left', 
+                padding: 'clamp(20px, 4vw, 40px)', 
+                background: 'rgba(10, 10, 10, 0.65)', 
+                backdropFilter: 'blur(30px)', 
+                WebkitBackdropFilter: 'blur(30px)',
+                border: '1px solid rgba(255,255,255,0.1)', 
+                borderRadius: '20px', 
+                boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
+                boxSizing: 'border-box'
+              }}
+            >
+              <p 
+                className="body-text" 
+                style={{ 
+                  fontSize: 'clamp(15px, 3.8vw, 22px)', 
+                  fontWeight: 500, 
+                  margin: 0, 
+                  color: 'var(--titanium)',
+                  lineHeight: 1.5,
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word'
+                }}
+              >
                 Clientes de alto valor não leem sua página — <span style={{ color: 'var(--amber)' }}>eles a sentem em três segundos</span>, e decidem ali se seu preço faz sentido.
               </p>
             </div>
           </div>
 
           {/* SCENE 5: The Final Blow */}
-          <div className="scene-text scene-5" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto' }}>
-            <h2 className="headline-lg" style={{ textAlign: 'center', maxWidth: '1000px' }}>
+          <div className="scene-text scene-5" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', left: 0, right: 0, margin: '0 auto', boxSizing: 'border-box' }}>
+            <h2 
+              className="headline-lg" 
+              style={{ 
+                textAlign: 'center', 
+                maxWidth: '1000px',
+                fontSize: 'clamp(1.2rem, 3.8vw, 2.2rem)',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
+              }}
+            >
               <span style={{ fontSize: '0.6em', color: 'var(--titanium-70)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Uma presença que parece amadora não é neutra:</span>
               <br/><br/>
-              <span className="magma-text headline-brutal" style={{ display: 'block', fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}>Ela ativamente reduz<br/>o que você pode cobrar.</span>
+              <span className="magma-text headline-brutal" style={{ display: 'block', fontSize: 'clamp(1.8rem, 5.5vw, 4.2rem)', wordBreak: 'break-word', overflowWrap: 'break-word' }}>Ela ativamente reduz<br/>o que você pode cobrar.</span>
             </h2>
           </div>
 

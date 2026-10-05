@@ -38,7 +38,19 @@ export default function OpeningDoor() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="section-border" style={{ position: 'relative', height: '400vh', background: 'var(--void)' }}>
+    <section 
+      ref={containerRef} 
+      className="section-border" 
+      style={{ 
+        position: 'relative', 
+        height: '400vh', 
+        background: 'var(--void)',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
+      }}
+    >
       <div 
         className="door-pinned" 
         style={{ 
@@ -46,10 +58,12 @@ export default function OpeningDoor() {
           top: 0, 
           height: '100vh', 
           width: '100%', 
+          maxWidth: '100vw',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          boxSizing: 'border-box'
         }}
       >
         {/* Glow behind doors */}
@@ -58,29 +72,87 @@ export default function OpeningDoor() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '800px',
-          height: '800px',
+          width: 'min(800px, 90vw)',
+          height: 'min(800px, 90vw)',
           background: 'radial-gradient(circle, rgba(255,94,0,0.15) 0%, transparent 60%)',
-          zIndex: 1
+          zIndex: 1,
+          pointerEvents: 'none'
         }} />
 
         {/* Text Container */}
-        <div className="container" style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
-          <h2 className="door-text-1 headline-md" style={{ position: 'absolute', left: 0, right: 0, opacity: 0, transform: 'translateY(40px)', color: 'var(--zinc-tech)', textAlign: 'center' }}>
+        <div 
+          className="container" 
+          style={{ 
+            position: 'relative', 
+            zIndex: 2, 
+            height: '100%', 
+            width: '100%',
+            maxWidth: '100%',
+            display: 'flex', 
+            alignItems: 'center',
+            boxSizing: 'border-box',
+            padding: '0 20px'
+          }}
+        >
+          <h2 
+            className="door-text-1 headline-md" 
+            style={{ 
+              position: 'absolute', 
+              left: '20px', 
+              right: '20px', 
+              opacity: 0, 
+              transform: 'translateY(40px)', 
+              color: 'var(--zinc-tech)', 
+              textAlign: 'center',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              fontSize: 'clamp(1.2rem, 3.5vw, 2rem)'
+            }}
+          >
             O que separa sua marca do próximo nível...
           </h2>
-          <h2 className="door-text-2 headline-lg" style={{ position: 'absolute', left: 0, right: 0, opacity: 0, transform: 'translateY(40px)', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+          <h2 
+            className="door-text-2 headline-lg" 
+            style={{ 
+              position: 'absolute', 
+              left: '20px', 
+              right: '20px', 
+              opacity: 0, 
+              transform: 'translateY(40px)', 
+              textAlign: 'center', 
+              maxWidth: '800px', 
+              margin: '0 auto',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              fontSize: 'clamp(1.6rem, 5vw, 3rem)'
+            }}
+          >
             Não é mais orçamento de tráfego.
           </h2>
-          <h2 className="door-text-3 headline-xl magma-text headline-brutal" style={{ position: 'absolute', left: 0, right: 0, opacity: 0, transform: 'translateY(40px)', textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+          <h2 
+            className="door-text-3 headline-xl magma-text headline-brutal" 
+            style={{ 
+              position: 'absolute', 
+              left: '20px', 
+              right: '20px', 
+              opacity: 0, 
+              transform: 'translateY(40px)', 
+              textAlign: 'center', 
+              display: 'flex', 
+              flexDirection: 'column',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              fontSize: 'clamp(1.8rem, 6vw, 4.5rem)'
+            }}
+          >
             <span style={{ fontSize: '0.4em', color: 'var(--titanium)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '16px' }}>É apenas um:</span>
             POSICIONAMENTO IMPECÁVEL.
           </h2>
         </div>
 
         {/* The Doors */}
-        <div className="door-left" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: '50vw', background: 'var(--obsidian)', borderRight: '1px solid rgba(255,255,255,0.05)', zIndex: 10 }} />
-        <div className="door-right" style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '50vw', background: 'var(--obsidian)', borderLeft: '1px solid rgba(255,255,255,0.05)', zIndex: 10 }} />
+        <div className="door-left" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: '50%', background: 'var(--obsidian)', borderRight: '1px solid rgba(255,255,255,0.05)', zIndex: 10 }} />
+        <div className="door-right" style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '50%', background: 'var(--obsidian)', borderLeft: '1px solid rgba(255,255,255,0.05)', zIndex: 10 }} />
       </div>
     </section>
   );

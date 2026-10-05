@@ -61,7 +61,19 @@ export default function Process() {
   }, { scope: containerRef });
 
   return (
-    <section id="processo" ref={containerRef} style={{ height: '400vh', position: 'relative', background: 'var(--void)' }}>
+    <section 
+      id="processo" 
+      ref={containerRef} 
+      style={{ 
+        height: '400vh', 
+        position: 'relative', 
+        background: 'var(--void)',
+        width: '100%',
+        maxWidth: '100vw',
+        overflow: 'hidden',
+        boxSizing: 'border-box'
+      }}
+    >
       {/* Soft gradient bridge from previous section */}
       <div style={{
         position: 'absolute',
@@ -80,11 +92,13 @@ export default function Process() {
           position: 'absolute',
           top: 0,
           width: '100%',
+          maxWidth: '100vw',
           height: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}
       >
         {/* Background ambient glow */}
@@ -93,10 +107,11 @@ export default function Process() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '800px',
-          height: '800px',
+          width: 'min(800px, 90vw)',
+          height: 'min(800px, 90vw)',
           background: 'radial-gradient(circle, rgba(255,94,0,0.06) 0%, transparent 70%)',
-          zIndex: 0
+          zIndex: 0,
+          pointerEvents: 'none'
         }} />
 
         {/* Massive Background Typography */}
@@ -104,17 +119,22 @@ export default function Process() {
           position: 'absolute',
           zIndex: 1,
           width: '100%',
+          maxWidth: '100vw',
           textAlign: 'center',
           pointerEvents: 'none',
-          opacity: 1
+          opacity: 1,
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}>
           <h2 className="headline-brutal" style={{
-            fontSize: 'clamp(5rem, 15vw, 12rem)',
+            fontSize: 'clamp(2.5rem, 11vw, 10rem)',
             color: 'transparent',
             WebkitTextStroke: '1px rgba(255,255,255,0.08)',
             letterSpacing: '0.05em',
             margin: 0,
-            lineHeight: 0.8
+            lineHeight: 0.9,
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word'
           }}>
             ENGENHARIA<br />
             <span style={{ color: 'rgba(255,94,0,0.05)', WebkitTextStroke: '0px' }}>DIVINA</span>
@@ -122,7 +142,18 @@ export default function Process() {
         </div>
 
         {/* Falling Cards Container */}
-        <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '600px', display: 'flex', justifyContent: 'center' }}>
+        <div 
+          style={{ 
+            position: 'relative', 
+            zIndex: 10, 
+            width: '100%', 
+            maxWidth: '600px', 
+            display: 'flex', 
+            justifyContent: 'center',
+            padding: '0 20px',
+            boxSizing: 'border-box'
+          }}
+        >
           {steps.map((step, i) => (
             <div
               key={step.num}
@@ -130,41 +161,44 @@ export default function Process() {
               style={{
                 position: 'absolute',
                 width: '100%',
-                padding: '56px',
+                padding: 'clamp(24px, 5vw, 56px)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '24px',
+                gap: 'clamp(14px, 3vw, 24px)',
                 background: 'linear-gradient(135deg, rgba(20,20,20,0.95) 0%, rgba(5,5,5,0.98) 100%)',
                 boxShadow: '0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,94,0,0.2), inset 0 0 40px rgba(255,94,0,0.03)',
                 transform: 'translateY(-100vh)',
-                borderRadius: '16px'
+                borderRadius: '16px',
+                boxSizing: 'border-box'
               }}
             >
               <div style={{
                 position: 'absolute',
                 top: 0,
                 right: 0,
-                width: '200px',
-                height: '200px',
+                width: 'min(200px, 50vw)',
+                height: 'min(200px, 50vw)',
                 background: 'radial-gradient(circle, rgba(255, 94, 0, 0.08) 0%, transparent 70%)',
                 pointerEvents: 'none',
               }} />
 
-              <span className="label-mono" style={{ color: 'var(--amber)', fontSize: '16px', textShadow: '0 0 20px rgba(255,94,0,0.5)' }}>
+              <span className="label-mono" style={{ color: 'var(--amber)', fontSize: 'clamp(14px, 3vw, 16px)', textShadow: '0 0 20px rgba(255,94,0,0.5)' }}>
                 / {step.num}
               </span>
               <h3
                 className="headline-lg"
                 style={{
-                  fontSize: '32px',
+                  fontSize: 'clamp(22px, 5vw, 32px)',
                   color: 'var(--titanium)',
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.02em'
+                  lineHeight: 1.15,
+                  letterSpacing: '-0.02em',
+                  wordBreak: 'break-word',
+                  margin: 0
                 }}
               >
                 {step.label}
               </h3>
-              <p className="body-text" style={{ fontSize: '18px', color: 'var(--zinc-tech)' }}>
+              <p className="body-text" style={{ fontSize: 'clamp(14px, 3.2vw, 18px)', color: 'var(--zinc-tech)', margin: 0, lineHeight: 1.55 }}>
                 {step.desc}
               </p>
             </div>
