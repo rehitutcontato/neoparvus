@@ -3,8 +3,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const items = [
   {
@@ -32,12 +31,13 @@ const items = [
 export default function Deliverables() {
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
+  const pinnedRef = useRef(null);
   const imagesRef = useRef([]);
   const sequenceRef = useRef({ frame: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const frameCount = 300;
 
-  // Preload images
+  // Preload eclipse/sun sequence frames
   useEffect(() => {
     const images = [];
     let loadedCount = 0;
@@ -49,93 +49,176 @@ export default function Deliverables() {
 
       img.onload = () => {
         loadedCount++;
-        if (loadedCount === 1 || loadedCount >= frameCount * 0.2) {
+        if (loadedCount === 1 || loadedCount >= frameCount * 0.15) {
           setIsLoaded(true);
         }
       };
+
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === 1) {
+          setIsLoaded(true);
+        }
+      };
+
       images.push(img);
     }
     imagesRef.current = images;
   }, []);
 
+  // Refresh ScrollTrigger when first frame becomes ready
+  useEffect(() => {
+    if (isLoaded) {
+      ScrollTrigger.refresh();
+    }
+  }, [isLoaded]);
+
   useGSAP(() => {
-    if (!isLoaded) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const context = canvas.getContext('2d');
+    if (!context) return;
 
     const render = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const currentImg = imagesRef.current[sequenceRef.current.frame];
+      if (!currentImg || !currentImg.complete) return;
 
-      const img = imagesRef.current[sequenceRef.current.frame];
-      if (!img || !img.complete) return;
-
-      const hRatio = canvas.width / img.width;
-      const vRatio = canvas.height / img.height;
+      const hRatio = canvas.width / currentImg.width;
+      const vRatio = canvas.height / currentImg.height;
       const ratio = Math.max(hRatio, vRatio);
-      const centerX = (canvas.width - img.width * ratio) / 2;
-      const centerY = (canvas.height - img.height * ratio) / 2;
+      const centerX = (canvas.width - currentImg.width * ratio) / 2;
+      const centerY = (canvas.height - currentImg.height * ratio) / 2;
 
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(img, 0, 0, img.width, img.height, centerX, centerY, img.width * ratio, img.height * ratio);
+      context.drawImage(
+        currentImg,
+        0,
+        0,
+        currentImg.width,
+        currentImg.height,
+        centerX,
+        centerY,
+        currentImg.width * ratio,
+        currentImg.height * ratio
+      );
     };
 
-    render();
-    window.addEventListener('resize', render);
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      render();
+    };
 
-    // 1. Canvas Scrub Animation
-    gsap.to(sequenceRef.current, {
-      frame: frameCount - 1,
-      snap: 'frame',
-      ease: 'none',
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    const isMobile = window.innerWidth < 768;
+    const stackOffset = isMobile ? 18 : 26;
+
+    // Card initial positions
+    // Card 0 starts visible and in place
+    gsap.set('.liquid-card-0', { y: 0, opacity: 1, scale: 1, zIndex: 1 });
+    // Cards 1-3 start tucked below
+    gsap.set('.liquid-card-1', { y: 150, opacity: 0, scale: 0.94, zIndex: 2 });
+    gsap.set('.liquid-card-2', { y: 150, opacity: 0, scale: 0.94, zIndex: 3 });
+    gsap.set('.liquid-card-3', { y: 150, opacity: 0, scale: 0.94, zIndex: 4 });
+
+    // Main pinned scrollytelling timeline
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: wrapperRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.5,
-      },
+        scrub: 0.6,
+        pin: '.deliverables-pinned',
+      }
+    });
+
+    // 1. Scrub canvas sequence throughout the entire pinned scroll duration
+    tl.to(sequenceRef.current, {
+      frame: frameCount - 1,
+      snap: 'frame',
+      ease: 'none',
+      duration: 10,
       onUpdate: render,
-    });
+    }, 0);
 
-    // 2. Card Stacking Animation
-    const cards = gsap.utils.toArray('.liquid-card');
-    
-    // Initial setup: cards are positioned below and invisible
-    gsap.set(cards, { y: 200, opacity: 0, scale: 0.9 });
+    // 2. Apple-style card stacking transition
+    // Card 1 enters and stacks over Card 0
+    tl.to('.liquid-card-1', {
+      y: stackOffset * 1,
+      opacity: 1,
+      scale: 1,
+      duration: 2,
+      ease: 'power2.out',
+    }, 1.8);
+    tl.to('.liquid-card-0', {
+      scale: 0.98,
+      opacity: 0.7,
+      duration: 2,
+      ease: 'power2.out',
+    }, 1.8);
 
-    cards.forEach((card, index) => {
-      // Calculate stagger bounds based on scroll container height
-      const startTrigger = `top+=${index * 800} top`; // Adjust spacing between cards
-      const endTrigger = `top+=${(index + 1) * 800} top`;
+    // Card 2 enters and stacks over Card 1
+    tl.to('.liquid-card-2', {
+      y: stackOffset * 2,
+      opacity: 1,
+      scale: 1,
+      duration: 2,
+      ease: 'power2.out',
+    }, 4.6);
+    tl.to('.liquid-card-1', {
+      scale: 0.98,
+      opacity: 0.7,
+      duration: 2,
+      ease: 'power2.out',
+    }, 4.6);
+    tl.to('.liquid-card-0', {
+      opacity: 0.45,
+      duration: 2,
+      ease: 'power2.out',
+    }, 4.6);
 
-      // Each card scrubs into place
-      gsap.to(card, {
-        y: index * 25, // Staggered stacking offset
-        opacity: 1,
-        scale: 1 - (cards.length - 1 - index) * 0.02, // Top card is 1, lower cards are slightly smaller
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: startTrigger,
-          end: endTrigger,
-          scrub: 1,
-        }
-      });
-    });
+    // Card 3 enters and stacks over Card 2
+    tl.to('.liquid-card-3', {
+      y: stackOffset * 3,
+      opacity: 1,
+      scale: 1,
+      duration: 2,
+      ease: 'power2.out',
+    }, 7.4);
+    tl.to('.liquid-card-2', {
+      scale: 0.98,
+      opacity: 0.7,
+      duration: 2,
+      ease: 'power2.out',
+    }, 7.4);
+    tl.to('.liquid-card-1', {
+      opacity: 0.45,
+      duration: 2,
+      ease: 'power2.out',
+    }, 7.4);
+    tl.to('.liquid-card-0', {
+      opacity: 0.25,
+      duration: 2,
+      ease: 'power2.out',
+    }, 7.4);
+
+    // Final hold: 9.4s to 10.0s allows reading the final stack before unpinning
 
     return () => {
-      window.removeEventListener('resize', render);
+      window.removeEventListener('resize', handleResize);
     };
-  }, { scope: wrapperRef, dependencies: [isLoaded] });
+  }, { scope: wrapperRef });
 
   return (
     <section 
       ref={wrapperRef} 
       id="entregas" 
+      className="section-border"
       style={{ 
-        position: 'relative',
-        height: '400vh', // long scroll height for stacking
+        position: 'relative', 
+        height: '420vh',
         background: 'var(--void)',
         width: '100%',
         maxWidth: '100vw',
@@ -143,10 +226,14 @@ export default function Deliverables() {
         boxSizing: 'border-box'
       }}
     >
+      {/* Pinned Scrollytelling Stage */}
       <div 
+        ref={pinnedRef}
+        className="deliverables-pinned"
         style={{
-          position: 'sticky',
+          position: 'absolute',
           top: 0,
+          left: 0,
           height: '100vh',
           width: '100%',
           maxWidth: '100vw',
@@ -157,6 +244,21 @@ export default function Deliverables() {
           boxSizing: 'border-box'
         }}
       >
+        {/* Ambient solar corona glow behind canvas */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'min(850px, 92vw)',
+          height: 'min(850px, 92vw)',
+          background: 'radial-gradient(circle, rgba(255,94,0,0.16) 0%, rgba(255,140,0,0.05) 45%, transparent 70%)',
+          zIndex: 1,
+          pointerEvents: 'none',
+          filter: 'blur(40px)',
+        }} />
+
+        {/* Eclipse Sequence Canvas */}
         <canvas
           ref={canvasRef}
           style={{
@@ -167,9 +269,10 @@ export default function Deliverables() {
             height: '100%',
             objectFit: 'cover',
             pointerEvents: 'none',
-            opacity: isLoaded ? 0.7 : 0,
+            opacity: isLoaded ? 0.75 : 0,
             transition: 'opacity 1s ease',
-            mixBlendMode: 'screen'
+            mixBlendMode: 'screen',
+            zIndex: 2,
           }}
         />
 
@@ -216,7 +319,7 @@ export default function Deliverables() {
           <h2
             className="headline-lg"
             style={{ 
-              marginBottom: 'clamp(24px, 5vw, 64px)',
+              marginBottom: 'clamp(20px, 4.5vw, 56px)',
               textAlign: 'center',
               textShadow: '0 4px 40px rgba(0,0,0,0.8)',
               fontSize: 'clamp(1.4rem, 4vw, 2.5rem)',
@@ -228,11 +331,18 @@ export default function Deliverables() {
             Não é só uma página. É posicionamento.
           </h2>
 
-          <div style={{ position: 'relative', height: '360px', maxWidth: '800px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-            {items.map((item) => (
+          <div style={{ 
+            position: 'relative', 
+            height: 'clamp(320px, 42vh, 380px)', 
+            maxWidth: '800px', 
+            margin: '0 auto', 
+            width: '100%', 
+            boxSizing: 'border-box' 
+          }}>
+            {items.map((item, index) => (
               <div
                 key={item.num}
-                className="liquid-card"
+                className={`liquid-card liquid-card-${index}`}
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -249,7 +359,9 @@ export default function Deliverables() {
                   display: 'flex',
                   gap: 'clamp(14px, 3vw, 32px)',
                   alignItems: 'flex-start',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  zIndex: index + 1,
+                  willChange: 'transform, opacity',
                 }}
               >
                 <span
