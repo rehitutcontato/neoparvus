@@ -5,31 +5,62 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CLIENT_PROJECTS } from '../data/clientProjectsData';
 import './ClientProjects.css';
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const TECH_STACK_MAP = {
-  'parvus-automate': ['ESP32 FreeRTOS C++', 'Wokwi Simulator', 'Web Serial API', 'Express REST', 'Supabase SQL', 'White-Label'],
   'marina-flores': ['Dark Luxury Botânica', 'Concierge WhatsApp', 'Rosas Colombianas', 'Next.js Fast', 'Zero Templates'],
   'isa-fogaca': ['Porsche 911 Showcase', 'Mídia Kit Interativo', 'Brutalist Supercar', 'Conversão 5 Dígitos', 'Zero PDF'],
+  'parvus-automate': ['ESP32 FreeRTOS C++', 'Wokwi Simulator', 'Web Serial API', 'Express REST', 'Supabase SQL', 'White-Label'],
   'gc-semijoias': ['Vitrine Ouro 18k & Ródio', 'Checkout WhatsApp', '0% Taxa Marketplace', 'Certificado 1 Ano'],
   'sep-3d': ['Manufatura Aditiva', 'Resina & FDM', 'Kit Corporativo B2B', 'Orçamento 3 Passos'],
 };
 
+const MAIN_WA = 'https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20estou%20pronto%20para%20experimentar%20o%20novo%20na%20minha%20empresa.';
+
 export default function ClientProjects() {
   const sectionRef = useRef(null);
+  const stageRef = useRef(null);
+  const [activeProjectId, setActiveProjectId] = useState(CLIENT_PROJECTS[0].id);
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeEmbed, setActiveEmbed] = useState(null);
-  const [deviceMode, setDeviceMode] = useState('desktop'); // 'desktop' | 'mobile'
+  const [stageDeviceMode, setStageDeviceMode] = useState('desktop'); // 'desktop' | 'mobile'
+  const [modalDeviceMode, setModalDeviceMode] = useState('desktop');
   const [iframeLoading, setIframeLoading] = useState(true);
+  const [stageIframeLoading, setStageIframeLoading] = useState(true);
 
-  // Filter projects
+  const activeProject = CLIENT_PROJECTS.find(p => p.id === activeProjectId) || CLIENT_PROJECTS[0];
+
+  // Filter projects for the vault grid
   const filteredProjects = activeCategory === 'all'
     ? CLIENT_PROJECTS
     : CLIENT_PROJECTS.filter(p => p.category === activeCategory);
 
+  const handleSelectProject = (projectId) => {
+    if (projectId === activeProjectId) return;
+    setStageIframeLoading(true);
+    setActiveProjectId(projectId);
+
+    // Smooth subtle bounce into stage on desktop
+    if (stageRef.current && window.innerWidth >= 900) {
+      gsap.fromTo(
+        stageRef.current,
+        { opacity: 0.7, y: 12 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      );
+    }
+  };
+
+  const handleSelectFromVault = (projectId) => {
+    handleSelectProject(projectId);
+    if (stageRef.current) {
+      const y = stageRef.current.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   const openEmbed = (project) => {
     setIframeLoading(true);
+    setModalDeviceMode('desktop');
     setActiveEmbed(project);
   };
 
@@ -72,22 +103,36 @@ export default function ClientProjects() {
       y: 30,
       opacity: 0,
       duration: 0.8,
-      stagger: 0.15,
+      stagger: 0.12,
       ease: 'power3.out',
       clearProps: 'all',
     });
 
-    // Cards reveal
-    gsap.from('.client-card', {
+    // Spotlight stage reveal
+    gsap.from('.clients-spotlight-stage', {
       scrollTrigger: {
-        trigger: '.clients-grid',
+        trigger: '.clients-spotlight-stage',
         start: 'top 85%',
         once: true,
       },
       y: 40,
       opacity: 0,
       duration: 0.9,
-      stagger: 0.18,
+      ease: 'power3.out',
+      clearProps: 'all',
+    });
+
+    // Vault cards reveal
+    gsap.from('.vault-card', {
+      scrollTrigger: {
+        trigger: '.clients-vault-grid',
+        start: 'top 88%',
+        once: true,
+      },
+      y: 35,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
       ease: 'power3.out',
       clearProps: 'all',
     });
@@ -95,7 +140,12 @@ export default function ClientProjects() {
 
   return (
     <section ref={sectionRef} id="trabalhos" className="clients-section">
-      <div className="clients-ambient-glow" />
+      <div 
+        className="clients-ambient-glow" 
+        style={{
+          background: `radial-gradient(ellipse at center, ${activeProject.accentGhost} 0%, transparent 70%)`
+        }}
+      />
 
       <div className="clients-container">
         {/* ══ HEADER ══ */}
@@ -103,256 +153,465 @@ export default function ClientProjects() {
           <div className="clients-conduit-line" />
 
           <div className="clients-chapter-tag">
-            <span>CAPÍTULO 06 • EVIDÊNCIA EM PRODUÇÃO</span>
+            <span>CAPÍTULO 06 • EVIDÊNCIA DE MERCADO // PORTFÓLIO DE ATIVOS</span>
           </div>
 
           <div className="clients-badge-wrap">
             <span className="clients-live-dot" />
-            <span className="clients-badge-text">CLUSTER OPERACIONAL // SISTEMAS ATIVOS NO AR</span>
+            <span className="clients-badge-text">CLUSTER OPERACIONAL // SISTEMAS DE ALTO VALOR NO AR</span>
           </div>
 
           <h2 className="clients-title">
-            Engenharia em Ação.{' '}
-            <span className="text-gradient-magma">Casos Reais no Ar.</span>
+            Nossos Clientes são{' '}
+            <span className="text-gradient-magma">Nossos Maiores Ativos.</span>
           </h2>
 
           <p className="clients-subtitle">
-            Aqui a teoria termina e a validação de mercado começa. Todas as aplicações abaixo foram projetadas sem templates genéricos, com código próprio de altíssima performance e arquitetura orientada à conversão — viabilizadas pela velocidade e precisão do nosso motor autônomo.
+            Empresas comuns compram templates e sofrem para justificar o preço. Líderes de mercado contratam engenharia proprietária que constrói autoridade instantânea e atrai capital qualificado. Abaixo estão ecossistemas reais em produção contínua.
           </p>
 
           {/* Quick HUD Metrics */}
           <div className="clients-hud-stats">
             <div className="clients-hud-pill">
               <span className="clients-hud-pill-highlight">5 / 5</span>
-              <span>Sistemas Ativos</span>
+              <span>Ativos Auditados</span>
             </div>
             <div className="clients-hud-pill">
               <span className="clients-hud-pill-highlight">0%</span>
-              <span>Templates Prontos</span>
+              <span>Templates Genéricos</span>
             </div>
             <div className="clients-hud-pill">
               <span className="clients-hud-pill-highlight">&lt; 0.72s</span>
               <span>Velocidade de Carga</span>
             </div>
             <div className="clients-hud-pill">
-              <span className="clients-hud-pill-highlight">Concierge Direct</span>
-              <span>Zero Atrito Comercial</span>
+              <span className="clients-hud-pill-highlight">Concierge 1-a-1</span>
+              <span>Filtro de Alto Ticket</span>
             </div>
             <div className="clients-hud-pill">
-              <span className="clients-hud-pill-highlight">99.98%</span>
-              <span>Uptime Auditado</span>
+              <span className="clients-hud-pill-highlight">Valuation</span>
+              <span>Ativo Perpétuo</span>
             </div>
-          </div>
-
-          {/* Category Filter Tabs */}
-          <div className="clients-filters">
-            <button
-              className={`clients-filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('all')}
-            >
-              Todos os Cases ({CLIENT_PROJECTS.length})
-            </button>
-            <button
-              className={`clients-filter-btn ${activeCategory === 'deep-tech' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('deep-tech')}
-            >
-              ⚡ Deep-Tech & IA (1)
-            </button>
-            <button
-              className={`clients-filter-btn ${activeCategory === 'alto-padrao' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('alto-padrao')}
-            >
-              👑 Alto Padrão & Varejo
-            </button>
-            <button
-              className={`clients-filter-btn ${activeCategory === 'creator' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('creator')}
-            >
-              🏎️ Creator & Supercarros
-            </button>
-            <button
-              className={`clients-filter-btn ${activeCategory === 'vitrine' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('vitrine')}
-            >
-              💎 Vitrine Semijoias
-            </button>
-            <button
-              className={`clients-filter-btn ${activeCategory === '3d' ? 'active' : ''}`}
-              onClick={() => setActiveCategory('3d')}
-            >
-              ⚙️ Manufatura 3D
-            </button>
           </div>
         </header>
 
-        {/* ══ CASES GRID ══ */}
-        <div className="clients-grid">
-          {filteredProjects.map((project) => (
-            <article
-              key={project.id}
-              className="client-card"
-              style={{
-                '--card-accent': project.accentColor,
-                '--card-accent-ghost': project.accentGhost,
-                '--card-accent-border': project.accentBorder,
-              }}
-            >
-              {/* Correlation Method Tag */}
-              <div className={`client-method-tag ${project.category === 'deep-tech' ? 'is-deep-tech' : 'is-client'}`}>
-                <span className="live-mini-dot" style={{ background: project.accentColor, boxShadow: `0 0 8px ${project.accentColor}` }} />
-                <span>
-                  {project.category === 'deep-tech'
-                    ? 'MOTOR AUTÔNOMO PROPRIETÁRIO // V2.4 ONLINE'
-                    : 'ECOSSISTEMA GERADO COM A METODOLOGIA PARVUS AUTOMATE'}
-                </span>
-              </div>
+        {/* ══ ASSET COMMAND STRIP (SELECTOR) ══ */}
+        <div className="asset-command-strip">
+          <div className="command-strip-label">
+            <span>SELECIONE UM ATIVO PARA INSPEÇÃO:</span>
+          </div>
 
-              {/* Browser Chrome Header */}
-              <div className="client-card-browser-bar">
-                <div className="browser-dots">
-                  <span className="browser-dot red" />
-                  <span className="browser-dot yellow" />
-                  <span className="browser-dot green" />
-                </div>
-
-                <div className="browser-address" title={project.url}>
-                  <span>🔒</span>
-                  <span>{project.url.replace('https://', '')}</span>
-                  <span className="browser-ping">ping: 24ms</span>
-                </div>
-
-                <span className="browser-status-tag">
-                  <span className="clients-live-dot" style={{ width: '5px', height: '5px', background: project.accentColor, boxShadow: `0 0 8px ${project.accentColor}` }} />
-                  ONLINE
-                </span>
-              </div>
-
-              {/* Visual Preview / Hero Banner */}
-              <div
-                className="client-card-preview"
-                style={{
-                  background: `linear-gradient(135deg, ${project.accentGhost} 0%, rgba(10, 10, 10, 0.95) 100%)`,
-                }}
-              >
-                <div className="client-card-preview-content">
+          <div className="command-strip-items">
+            {CLIENT_PROJECTS.map((project, index) => {
+              const isSelected = project.id === activeProjectId;
+              return (
+                <button
+                  key={project.id}
+                  type="button"
+                  onClick={() => handleSelectProject(project.id)}
+                  className={`command-asset-tab ${isSelected ? 'active' : ''}`}
+                  style={{
+                    '--tab-accent': project.accentColor,
+                    '--tab-ghost': project.accentGhost,
+                    '--tab-border': project.accentBorder,
+                  }}
+                >
+                  <span className="asset-tab-index">0{index + 1}</span>
+                  <div className="asset-tab-info">
+                    <span className="asset-tab-name">{project.name}</span>
+                    <span className="asset-tab-multiplier">{project.ticketMultiplier.split(' ')[0]} {project.ticketMultiplier.split(' ')[1] || ''}</span>
+                  </div>
                   <span
-                    className="client-preview-badge"
+                    className="asset-tab-dot"
                     style={{
-                      background: project.accentGhost,
-                      color: project.accentColor,
-                      border: `1px solid ${project.accentBorder}`,
+                      background: isSelected ? project.accentColor : 'rgba(255,255,255,0.2)',
+                      boxShadow: isSelected ? `0 0 10px ${project.accentColor}` : 'none',
                     }}
-                  >
-                    {project.categoryBadge}
-                  </span>
-                  <h3 className="client-preview-name">{project.name}</h3>
-                  <p className="client-preview-tagline">{project.tagline}</p>
-                </div>
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-                {/* Hover Quick Actions */}
-                <div className="client-preview-hover-action">
-                  <button
-                    className="preview-action-btn primary"
-                    onClick={() => openEmbed(project)}
-                  >
-                    ⚡ Testar Embed ao Vivo
-                  </button>
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="preview-action-btn secondary"
-                  >
-                    Site Oficial ↗
-                  </a>
+        {/* ══ THE EXECUTIVE SPOTLIGHT STAGE (O PALCO PRINCIPAL) ══ */}
+        <div 
+          ref={stageRef}
+          className="clients-spotlight-stage"
+          style={{
+            '--spotlight-accent': activeProject.accentColor,
+            '--spotlight-ghost': activeProject.accentGhost,
+            '--spotlight-border': activeProject.accentBorder,
+          }}
+        >
+          {/* Top Stage Bar */}
+          <div className="stage-top-bar">
+            <div className="stage-top-left">
+              <span className="stage-asset-live-indicator">
+                <span className="clients-live-dot" style={{ background: activeProject.accentColor, boxShadow: `0 0 10px ${activeProject.accentColor}` }} />
+                <span>ATIVO AUDITADO NO AR</span>
+              </span>
+              <span className="stage-separator">•</span>
+              <span className="stage-origin-text">{activeProject.location}</span>
+            </div>
+
+            <div className="stage-top-right">
+              <span className="stage-badge-category" style={{ color: activeProject.accentColor, background: activeProject.accentGhost, borderColor: activeProject.accentBorder }}>
+                {activeProject.categoryBadge}
+              </span>
+            </div>
+          </div>
+
+          <div className="stage-layout-grid">
+            {/* ══ COLUMN 1: O DOSSIÊ ESTRATÉGICO ══ */}
+            <div className="stage-dossier-column">
+              <div className="dossier-header">
+                <h3 className="dossier-client-name">{activeProject.name}</h3>
+                <p className="dossier-client-tagline">{activeProject.tagline}</p>
+              </div>
+
+              {/* Tese de Posicionamento High-Ticket */}
+              <div className="dossier-thesis-card">
+                <div className="thesis-card-header">
+                  <span className="thesis-card-icon">💎</span>
+                  <span className="thesis-card-label">TESE DE VALOR &amp; POSICIONAMENTO HIGH-TICKET</span>
+                </div>
+                <p className="thesis-card-text">{activeProject.highTicketThesis}</p>
+                <div className="thesis-multiplier-tag">
+                  <span className="multiplier-bullet">✦</span>
+                  <span>{activeProject.ticketMultiplier}</span>
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="client-card-body">
-                {/* Tech Stack Pills Strip */}
-                {TECH_STACK_MAP[project.id] && (
-                  <div className="client-tech-strip">
-                    <span className="tech-strip-label">STACK:</span>
-                    <div className="tech-strip-items">
-                      {TECH_STACK_MAP[project.id].map((tech, idx) => (
-                        <span key={idx} className="tech-pill">{tech}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Location / History */}
-                <div className="client-origin-bar">
-                  <span className="client-origin-icon">📍</span>
-                  <span>{project.location}</span>
+              {/* O Desafio de Mercado vs A Solução Parvus */}
+              <div className="dossier-challenge-solution">
+                <div className="dossier-cs-box challenge">
+                  <div className="dossier-cs-title">O Desafio no Modelo Tradicional</div>
+                  <p className="dossier-cs-desc">{activeProject.challenge}</p>
                 </div>
 
-                {/* Challenge & Solution */}
-                <div className="client-challenge-solution">
-                  <div className="client-cs-box">
-                    <div className="client-cs-label">O Desafio de Mercado</div>
-                    <div className="client-cs-text">{project.challenge}</div>
+                <div className="dossier-cs-box solution">
+                  <div className="dossier-cs-title" style={{ color: activeProject.accentColor }}>
+                    A Engenharia Proprietária Parvus
                   </div>
-
-                  <div className="client-cs-box">
-                    <div className="client-cs-label" style={{ color: project.accentColor }}>
-                      A Arquitetura Parvus
-                    </div>
-                    <div className="client-cs-text">{project.solution}</div>
-                  </div>
+                  <p className="dossier-cs-desc">{activeProject.solution}</p>
                 </div>
+              </div>
 
-                {/* Deliverables Checklist */}
-                <div>
-                  <div className="client-cs-label" style={{ marginBottom: '8px' }}>
-                    Entregáveis em Produção
+              {/* Métricas Auditadas */}
+              <div className="dossier-metrics-grid">
+                {activeProject.metrics.map((m, idx) => (
+                  <div key={idx} className="dossier-metric-item">
+                    <span className="dossier-metric-value" style={{ color: idx === 0 ? activeProject.accentColor : 'var(--titanium)' }}>
+                      {m.value}
+                    </span>
+                    <span className="dossier-metric-label">{m.label}</span>
+                    <span className="dossier-metric-detail">{m.detail}</span>
                   </div>
-                  <div className="client-deliverables-wrap">
-                    {project.deliverables.slice(0, 4).map((deliv, idx) => (
-                      <span key={idx} className="client-deliverable-pill">
-                        {deliv}
-                      </span>
+                ))}
+              </div>
+
+              {/* Depoimento / Percepção de Valor */}
+              {activeProject.executiveQuote && (
+                <div className="dossier-quote-box">
+                  <p className="dossier-quote-text">{activeProject.executiveQuote}</p>
+                  <span className="dossier-quote-author">— Síntese de Posicionamento Executivo</span>
+                </div>
+              )}
+
+              {/* Tech Stack Strip */}
+              {TECH_STACK_MAP[activeProject.id] && (
+                <div className="dossier-tech-strip">
+                  <span className="dossier-tech-label">ARQUITETURA:</span>
+                  <div className="dossier-tech-pills">
+                    {TECH_STACK_MAP[activeProject.id].map((tech, i) => (
+                      <span key={i} className="dossier-tech-pill">{tech}</span>
                     ))}
                   </div>
                 </div>
+              )}
 
-                {/* Metrics Grid */}
-                <div className="client-metrics-grid">
-                  {project.metrics.map((metric, idx) => (
-                    <div key={idx} className="client-metric-cell">
-                      <div className="client-metric-val">{metric.value}</div>
-                      <div className="client-metric-lbl">{metric.label} • {metric.detail}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Card Footer Actions */}
-              <footer className="client-card-footer">
+              {/* Executive Actions */}
+              <div className="dossier-action-bar">
                 <button
-                  className="client-footer-btn-primary"
-                  onClick={() => openEmbed(project)}
+                  type="button"
+                  className="dossier-btn-primary"
+                  onClick={() => openEmbed(activeProject)}
+                  style={{
+                    background: activeProject.accentColor,
+                    borderColor: activeProject.accentColor,
+                    color: '#000',
+                    boxShadow: `0 0 25px ${activeProject.accentGhost}`,
+                  }}
                 >
-                  ⚡ Testar Prévia Interativa (Embed)
+                  <span>⚡ Expandir no Simulador (Tela Cheia)</span>
                 </button>
 
                 <a
-                  href={project.url}
+                  href={activeProject.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="client-footer-link-external"
+                  className="dossier-btn-secondary"
                 >
-                  Visitar Website Oficial ↗
+                  <span>Acessar Ativo Oficial ↗</span>
                 </a>
-              </footer>
-            </article>
-          ))}
+
+                <a
+                  href={`https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20analisei%20o%20case%20de%20${encodeURIComponent(activeProject.name)}%20e%20gostaria%20de%20desenvolver%20um%20ativo%20com%20posicionamento%20similar.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="dossier-btn-whatsapp"
+                  title="Falar sobre um ativo similar no WhatsApp"
+                >
+                  <span>Solicitar Ativo Similar 💬</span>
+                </a>
+              </div>
+            </div>
+
+            {/* ══ COLUMN 2: O WORKSTATION DIGITAL INTERATIVO (IFRAME EM TEMPO REAL) ══ */}
+            <div className="stage-viewport-column">
+              <div className="stage-workstation-frame">
+                {/* Browser Device Bar */}
+                <div className="workstation-chrome-bar">
+                  <div className="browser-dots">
+                    <span className="browser-dot red" />
+                    <span className="browser-dot yellow" />
+                    <span className="browser-dot green" />
+                  </div>
+
+                  <div className="workstation-address-capsule" title={activeProject.url}>
+                    <span className="address-lock">🔒</span>
+                    <span className="address-domain">{activeProject.url.replace('https://', '').replace('/', '')}</span>
+                    <span className="address-ping">ping: 22ms</span>
+                  </div>
+
+                  {/* Device Switcher (Desktop / Mobile) */}
+                  <div className="workstation-device-switch">
+                    <button
+                      type="button"
+                      className={`device-btn ${stageDeviceMode === 'desktop' ? 'active' : ''}`}
+                      onClick={() => setStageDeviceMode('desktop')}
+                      title="Modo Desktop"
+                    >
+                      🖥️
+                    </button>
+                    <button
+                      type="button"
+                      className={`device-btn ${stageDeviceMode === 'mobile' ? 'active' : ''}`}
+                      onClick={() => setStageDeviceMode('mobile')}
+                      title="Modo iPhone Mobile"
+                    >
+                      📱
+                    </button>
+                    <button
+                      type="button"
+                      className="device-btn expand-btn"
+                      onClick={() => openEmbed(activeProject)}
+                      title="Expandir para Tela Cheia"
+                    >
+                      ⛶
+                    </button>
+                  </div>
+                </div>
+
+                {/* Viewport Canvas Stage */}
+                <div className={`workstation-canvas-container ${stageDeviceMode === 'mobile' ? 'is-mobile-frame' : 'is-desktop-frame'}`}>
+                  {stageIframeLoading && (
+                    <div className="workstation-loading-screen">
+                      <div className="embed-spinner" style={{ borderTopColor: activeProject.accentColor }} />
+                      <span className="workstation-loading-label">Carregando ativo de {activeProject.name}...</span>
+                    </div>
+                  )}
+
+                  <iframe
+                    key={`${activeProject.id}-${stageDeviceMode}`}
+                    src={activeProject.url}
+                    className="workstation-iframe"
+                    title={`Visualização de ${activeProject.name}`}
+                    loading="lazy"
+                    onLoad={() => setStageIframeLoading(false)}
+                  />
+
+                  {/* Mobile Frame Top Speaker Notch (Decor) */}
+                  {stageDeviceMode === 'mobile' && (
+                    <div className="mobile-dynamic-island" />
+                  )}
+                </div>
+
+                {/* Bottom Frame Status Bar */}
+                <div className="workstation-bottom-bar">
+                  <div className="workstation-status-left">
+                    <span className="workstation-pulse-dot" style={{ background: activeProject.accentColor }} />
+                    <span>Ambiente Interativo Ativo • Role e explore a aplicação</span>
+                  </div>
+                  <div className="workstation-status-right">
+                    <button
+                      type="button"
+                      onClick={() => openEmbed(activeProject)}
+                      className="workstation-theater-link"
+                    >
+                      Abrir Modo Teatro ↗
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ══ THE ASSET VAULT (O ACERVO COMPLETO DE CASOS EM BENTO GRID) ══ */}
+        <div className="clients-vault-section">
+          <div className="vault-section-header">
+            <div className="vault-header-left">
+              <span className="vault-eyebrow">COFRE DE ATIVOS DIGITAIS</span>
+              <h3 className="vault-title">Explore os 5 Ecossistemas em Produção</h3>
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="vault-filters">
+              <button
+                className={`vault-filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('all')}
+              >
+                Todos ({CLIENT_PROJECTS.length})
+              </button>
+              <button
+                className={`vault-filter-btn ${activeCategory === 'alto-padrao' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('alto-padrao')}
+              >
+                👑 Luxo Botânico
+              </button>
+              <button
+                className={`vault-filter-btn ${activeCategory === 'creator' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('creator')}
+              >
+                🏎️ Supercarros &amp; Creator
+              </button>
+              <button
+                className={`vault-filter-btn ${activeCategory === 'deep-tech' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('deep-tech')}
+              >
+                ⚡ Deep-Tech IA
+              </button>
+              <button
+                className={`vault-filter-btn ${activeCategory === 'vitrine' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('vitrine')}
+              >
+                💎 Alta Joalheria
+              </button>
+              <button
+                className={`vault-filter-btn ${activeCategory === '3d' ? 'active' : ''}`}
+                onClick={() => setActiveCategory('3d')}
+              >
+                ⚙️ B2B Industrial
+              </button>
+            </div>
+          </div>
+
+          <div className="clients-vault-grid">
+            {filteredProjects.map((project, idx) => {
+              const isCurrent = project.id === activeProjectId;
+              return (
+                <article
+                  key={project.id}
+                  className={`vault-card ${isCurrent ? 'is-spotlight-active' : ''}`}
+                  style={{
+                    '--vault-accent': project.accentColor,
+                    '--vault-ghost': project.accentGhost,
+                    '--vault-border': project.accentBorder,
+                  }}
+                >
+                  <div className="vault-card-top">
+                    <span className="vault-card-category" style={{ color: project.accentColor, background: project.accentGhost, borderColor: project.accentBorder }}>
+                      {project.categoryBadge}
+                    </span>
+                    <span className="vault-card-origin">{project.location.split('•')[0]}</span>
+                  </div>
+
+                  <div className="vault-card-body">
+                    <h4 className="vault-card-name">{project.name}</h4>
+                    <p className="vault-card-tagline">{project.tagline}</p>
+                    
+                    <div className="vault-card-thesis">
+                      <span className="vault-thesis-highlight">Alavanca de Valor:</span>
+                      <p>{project.ticketMultiplier}</p>
+                    </div>
+
+                    <div className="vault-card-metrics-strip">
+                      {project.metrics.slice(0, 2).map((m, i) => (
+                        <div key={i} className="vault-mini-metric">
+                          <span className="mini-metric-val">{m.value}</span>
+                          <span className="mini-metric-lbl">{m.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="vault-card-footer">
+                    <button
+                      type="button"
+                      className="vault-btn-focus"
+                      onClick={() => handleSelectFromVault(project.id)}
+                    >
+                      <span>{isCurrent ? '✦ Ativo no Palco' : 'Inspecionar no Palco ↑'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="vault-btn-embed"
+                      onClick={() => openEmbed(project)}
+                      title="Testar no Simulador"
+                    >
+                      ⚡ Testar Embed
+                    </button>
+
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="vault-link-direct"
+                      title="Abrir Site Oficial"
+                    >
+                      ↗
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ══ HIGH-TICKET MANIFESTO ANCHOR ══ */}
+        <div className="clients-manifesto-banner">
+          <div className="manifesto-banner-glow" />
+          <div className="manifesto-banner-content">
+            <div className="manifesto-text-wrap">
+              <span className="manifesto-eyebrow">EQUAÇÃO DE VALOR EXECUTIVA</span>
+              <h3 className="manifesto-headline">
+                Se o seu contrato médio é de 5 ou 6 dígitos, sua presença digital deve fechar a venda antes da proposta.
+              </h3>
+              <p className="manifesto-sub">
+                Não cobramos por horas ou por templates descartáveis. Arquitetamos ativos de código proprietário que conferem poder de ancoragem imediato e transformam visitantes em clientes qualificados.
+              </p>
+            </div>
+
+            <div className="manifesto-action-wrap">
+              <a
+                href={MAIN_WA}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="manifesto-cta-btn"
+              >
+                <span>Construir Nosso Próximo Ativo ↗</span>
+              </a>
+              <span className="manifesto-guarantee-note">✦ Founder-Led · Conversa Direta com Engenharia</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          INTERACTIVE BROWSER SIMULATOR MODAL (EMBED)
+          INTERACTIVE FULLSCREEN BROWSER SIMULATOR MODAL (THEATER)
          ═══════════════════════════════════════════════════════════════ */}
       {activeEmbed && (
         <div
@@ -369,7 +628,7 @@ export default function ClientProjects() {
             <div className="embed-modal-chrome">
               <div className="embed-chrome-left">
                 <div className="browser-dots">
-                  <span className="browser-dot red" onClick={closeEmbed} style={{ cursor: 'pointer' }} />
+                  <span className="browser-dot red" onClick={closeEmbed} style={{ cursor: 'pointer' }} title="Fechar" />
                   <span className="browser-dot yellow" />
                   <span className="browser-dot green" />
                 </div>
@@ -379,44 +638,43 @@ export default function ClientProjects() {
                       fontFamily: 'var(--font-mono)',
                       fontSize: '12px',
                       fontWeight: 700,
-                      color: 'var(--titanium)',
+                      color: activeEmbed.accentColor,
                     }}
                   >
                     {activeEmbed.name}
                   </span>
-                  <span className="browser-status-tag" style={{ fontSize: '9px', padding: '2px 6px' }}>
-                    AO VIVO
+                  <span className="hide-mobile" style={{ color: 'var(--zinc-dark)' }}>|</span>
+                  <span className="hide-mobile" style={{ fontSize: '11px', color: 'var(--zinc-tech)' }}>
+                    {activeEmbed.categoryBadge}
                   </span>
                 </div>
               </div>
 
-              {/* URL Bar */}
               <div className="embed-chrome-center">
                 <div className="embed-address-pill">
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span>🔒</span>
-                    <span>{activeEmbed.url}</span>
-                  </span>
-                  <span style={{ color: 'var(--zinc-tech)', fontSize: '10px' }}>HTTPS</span>
+                    <span style={{ color: 'var(--titanium)' }}>{activeEmbed.url}</span>
+                  </div>
+                  <span className="browser-ping">ping: 18ms</span>
                 </div>
               </div>
 
-              {/* Right Controls: Device Mode + External + Close */}
               <div className="embed-chrome-right">
                 <div className="embed-device-switcher">
                   <button
-                    className={`embed-device-btn ${deviceMode === 'desktop' ? 'active' : ''}`}
-                    onClick={() => setDeviceMode('desktop')}
-                    title="Visualizar em Desktop"
+                    className={`embed-device-btn ${modalDeviceMode === 'desktop' ? 'active' : ''}`}
+                    onClick={() => setModalDeviceMode('desktop')}
+                    title="Visualização Desktop"
                   >
                     🖥️ Desktop
                   </button>
                   <button
-                    className={`embed-device-btn ${deviceMode === 'mobile' ? 'active' : ''}`}
-                    onClick={() => setDeviceMode('mobile')}
-                    title="Visualizar em Mobile"
+                    className={`embed-device-btn ${modalDeviceMode === 'mobile' ? 'active' : ''}`}
+                    onClick={() => setModalDeviceMode('mobile')}
+                    title="Visualização Mobile"
                   >
-                    📱 Mobile
+                    📱 iPhone
                   </button>
                 </div>
 
@@ -427,13 +685,14 @@ export default function ClientProjects() {
                   className="preview-action-btn secondary"
                   style={{ padding: '6px 12px', fontSize: '11px' }}
                 >
-                  Abrir Nova Aba ↗
+                  Abrir Guia ↗
                 </a>
 
                 <button
+                  type="button"
                   className="embed-close-btn"
                   onClick={closeEmbed}
-                  aria-label="Fechar prévia"
+                  aria-label="Fechar modal"
                 >
                   ✕ Fechar
                 </button>
@@ -442,42 +701,49 @@ export default function ClientProjects() {
 
             {/* Modal Viewport Area */}
             <div className="embed-modal-viewport">
-              <div className={`embed-iframe-wrapper ${deviceMode === 'mobile' ? 'mobile-view' : ''}`}>
+              <div className={`embed-iframe-wrapper ${modalDeviceMode === 'mobile' ? 'mobile-view' : ''}`}>
                 {iframeLoading && (
                   <div className="embed-loading-shim">
-                    <div className="embed-spinner" />
+                    <div className="embed-spinner" style={{ borderTopColor: activeEmbed.accentColor }} />
                     <span
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '12px',
-                        color: 'var(--titanium-70)',
+                        color: 'var(--zinc-tech)',
                         letterSpacing: '0.08em',
                       }}
                     >
-                      Carregando ecossistema de {activeEmbed.name}...
+                      CONECTANDO AO SERVIDOR DE {activeEmbed.name.toUpperCase()}...
                     </span>
                   </div>
                 )}
-
                 <iframe
                   src={activeEmbed.url}
-                  title={`Demonstração interativa ao vivo de ${activeEmbed.name}`}
                   className="embed-iframe"
+                  title={`Simulador interativo de ${activeEmbed.name}`}
                   onLoad={() => setIframeLoading(false)}
-                  loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
               </div>
             </div>
 
-            {/* Modal Footer Info */}
+            {/* Modal Footer */}
             <div className="embed-modal-footer">
-              <span>
-                Simulador de Navegação Parvus Space • {activeEmbed.name} ({activeEmbed.location})
-              </span>
-              <span>
-                Pressione <kbd style={{ padding: '2px 6px', background: '#222', borderRadius: '4px' }}>ESC</kbd> para sair
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className="clients-live-dot" style={{ background: activeEmbed.accentColor }} />
+                <span>Ambiente Sandbox Interativo • Conexão Segura SSL</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <span className="hide-mobile">Pressione ESC para fechar</span>
+                <a
+                  href={`https://wa.me/5519994656845?text=Ol%C3%A1%20Pablo%2C%20gostei%20muito%20da%20solu%C3%A7%C3%A3o%20de%20${encodeURIComponent(activeEmbed.name)}%20e%20quero%20um%20ativo%20similar.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: activeEmbed.accentColor, textDecoration: 'none', fontWeight: 600 }}
+                >
+                  Quero um ativo como este ↗
+                </a>
+              </div>
             </div>
           </div>
         </div>
